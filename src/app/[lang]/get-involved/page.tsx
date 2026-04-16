@@ -51,7 +51,7 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
 
   const heroStats = [
     { value: impactMade > 0 ? fmt(impactMade) : "120k", label: "Lives Impacted" },
-    { value: countriesReached > 0 ? countriesReached.toString() : "45", label: "Tech Hubs Active" },
+    { value: countriesReached > 0 ? countriesReached.toString() : "45", label: "Countries Reached" },
     { value: communitiesImpacted > 0 ? fmt(communitiesImpacted) : "10k+", label: "Communities Served" },
   ];
 
