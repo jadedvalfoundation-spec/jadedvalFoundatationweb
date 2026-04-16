@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import Navbar from "@/components/shared/Navbar";
@@ -44,15 +45,21 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const stats = await getStats();
+  const [stats, dict] = await Promise.all([
+    getStats(),
+    getDictionary(lang as Locale),
+  ]);
+  const d = dict.getInvolved;
+  const dc = dict.common;
+
   const impactMade = stats.impactMade ?? 0;
   const countriesReached = stats.countriesReached ?? 0;
   const communitiesImpacted = stats.communitiesImpacted ?? 0;
 
   const heroStats = [
-    { value: impactMade > 0 ? fmt(impactMade) : "120k", label: "Lives Impacted" },
-    { value: countriesReached > 0 ? countriesReached.toString() : "45", label: "Countries Reached" },
-    { value: communitiesImpacted > 0 ? fmt(communitiesImpacted) : "10k+", label: "Communities Served" },
+    { value: impactMade > 0 ? fmt(impactMade) : "120k", label: dc.livesImpacted },
+    { value: countriesReached > 0 ? countriesReached.toString() : "45", label: dc.countriesReached },
+    { value: communitiesImpacted > 0 ? fmt(communitiesImpacted) : "10k+", label: dc.communitiesServed },
   ];
 
   return (
@@ -65,14 +72,14 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-brand">Get Involved</span>
+              <span className="text-xs font-semibold uppercase tracking-widest text-brand">{d.heroBadge}</span>
             </div>
             <h1 className="font-heading text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-              Your Contribution Is the{" "}
-              <em className="not-italic text-brand">Catalyst</em>
+              {d.heroTitle}{" "}
+              <em className="not-italic text-brand">{d.heroHighlight}</em>
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-gray-400">
-              Direct financial support drives the research, development, and deployment of our high-tech humanitarian infrastructure.
+              {d.heroSubtitle}
             </p>
 
             {/* Stats */}
@@ -90,7 +97,7 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
                 href={`/${lang}/donate`}
                 className="inline-block rounded-lg border-2 border-brand bg-brand/10 px-8 py-3.5 text-sm font-bold text-brand transition hover:bg-brand hover:text-white"
               >
-                Make a Donation
+                {dc.donateNow}
               </Link>
             </div>
           </div>
@@ -101,7 +108,12 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <h2 className="font-heading text-4xl font-bold text-white">Partnership Ecosystems</h2>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.ecosystemBadge}</span>
+            <h2 className="mt-2 font-heading text-4xl font-bold text-white">
+              {d.ecosystemTitle}{" "}
+              <em className="not-italic text-brand">{d.ecosystemHighlight}</em>
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-gray-400">{d.ecosystemSubtitle}</p>
             <div className="mx-auto mt-3 h-0.5 w-12 bg-brand" />
           </div>
 
@@ -109,7 +121,9 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
             {/* Individual */}
             <div className="flex flex-col rounded-2xl p-8"
               style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <h3 className="font-heading text-2xl font-bold text-white">Individual Partnership</h3>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.individualBadge}</span>
+              <h3 className="mt-1 font-heading text-2xl font-bold text-white">{d.individualTitle}</h3>
+              <p className="mt-2 text-sm text-gray-400">{d.individualDesc}</p>
               <ul className="mt-6 flex-1 space-y-5">
                 {INDIVIDUAL_PERKS.map((perk) => (
                   <li key={perk.title} className="flex gap-4">
@@ -125,14 +139,16 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
               </ul>
               <a href="#get-involved-forms"
                 className="mt-8 block rounded-lg border border-brand bg-brand/10 py-3.5 text-center text-sm font-bold text-brand transition hover:bg-brand hover:text-white">
-                Apply for Membership
+                {d.tabIndividual}
               </a>
             </div>
 
             {/* Corporate */}
             <div className="flex flex-col rounded-2xl p-8"
               style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <h3 className="font-heading text-2xl font-bold text-white">Corporate Partnership</h3>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.corporateBadge}</span>
+              <h3 className="mt-1 font-heading text-2xl font-bold text-white">{d.corporateTitle}</h3>
+              <p className="mt-2 text-sm text-gray-400">{d.corporateDesc}</p>
               <ul className="mt-6 flex-1 space-y-5">
                 {CORPORATE_PERKS.map((perk) => (
                   <li key={perk.title} className="flex gap-4">
@@ -148,7 +164,7 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
               </ul>
               <a href="#get-involved-forms"
                 className="mt-8 block rounded-lg border border-brand bg-brand/10 py-3.5 text-center text-sm font-bold text-brand transition hover:bg-brand hover:text-white">
-                Request Prospectus
+                {d.tabCorporate}
               </a>
             </div>
           </div>
@@ -159,12 +175,12 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
       <section id="get-involved-forms" className="py-20" style={{ background: "#0a1520" }}>
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <div className="mb-10 text-center">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand">Join Us</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand">{dict.nav.getInvolved}</span>
             <h2 className="mt-2 font-heading text-3xl font-bold text-white sm:text-4xl">
-              How Would You Like to Get Involved?
+              {d.ecosystemTitle} · {d.heroHighlight}?
             </h2>
             <p className="mt-3 text-gray-400">
-              Choose the path that fits you best. Every form of support transforms lives.
+              {d.ecosystemSubtitle}
             </p>
           </div>
 

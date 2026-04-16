@@ -1,85 +1,17 @@
 {
-  "nav": {
-    "home": "Inicio",
-    "about": "Acerca de",
-    "programs": "Programas",
-    "donate": "Donar",
-    "contact": "Contacto",
-    "signIn": "Iniciar sesión",
-    "getStarted": "Comenzar",
-    "dashboard": "Panel",
-    "profile": "Perfil",
-    "adminPanel": "Panel de administración",
-    "signOut": "Cerrar sesión",
-    "getInvolved": "Participar",
-    "impact": "Impacto",
-    "news": "Noticias"
-  },
-  "hero": {
-    "title": "Construyendo Comunidades Más Fuertes Juntos",
-    "subtitle": "La Fundación Jadedval se dedica a empoderar vidas a través de la educación, la salud y el desarrollo comunitario sostenible.",
-    "donateNow": "Donar Ahora",
-    "ourPrograms": "Nuestros Programas"
-  },
-  "stats": {
-    "livesImpacted": "Vidas Impactadas",
-    "programs": "Programas",
-    "communities": "Comunidades",
-    "volunteers": "Voluntarios"
-  },
-  "programs": {
-    "heading": "Nuestros Programas Clave",
-    "subheading": "Ejecutamos programas de impacto que crean un cambio duradero en múltiples sectores.",
-    "education": {
-      "title": "Educación",
-      "description": "Proporcionando becas, útiles escolares y tutoría a estudiantes desfavorecidos."
-    },
-    "healthcare": {
-      "title": "Salud",
-      "description": "Alcance médico gratuito, exámenes de salud y programas de bienestar para comunidades."
-    },
-    "skills": {
-      "title": "Formación de Habilidades",
-      "description": "Programas de formación vocacional y emprendimiento que fomentan la independencia económica."
-    },
-    "community": {
-      "title": "Desarrollo Comunitario",
-      "description": "Proyectos de infraestructura que mejoran los estándares de vida y el bienestar comunitario."
-    },
-    "youth": {
-      "title": "Empoderamiento Juvenil",
-      "description": "Capacitación en liderazgo, deportes y programas culturales para jóvenes."
-    },
-    "environment": {
-      "title": "Medio Ambiente",
-      "description": "Plantación de árboles, campañas de limpieza e iniciativas de educación sobre sostenibilidad."
-    }
-  },
-  "cta": {
-    "heading": "¿Listo para Hacer una Diferencia?",
-    "subheading": "Únete a nuestra misión de crear un mundo mejor. Cada contribución cuenta.",
-    "joinUs": "Únete",
-    "contactUs": "Contáctanos"
-  },
-  "footer": {
-    "tagline": "Empoderando comunidades a través de la educación, la salud y el desarrollo sostenible.",
-    "quickLinks": "Enlaces Rápidos",
-    "programsTitle": "Programas",
-    "contact": "Contacto",
-    "allRightsReserved": "Todos los derechos reservados."
-  },
-  "auth": {
-    "signIn": "Iniciar sesión",
-    "signUp": "Registrarse",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "noAccount": "¿No tienes una cuenta?",
-    "hasAccount": "¿Ya tienes una cuenta?",
-    "fullName": "Nombre completo",
-    "confirmPassword": "Confirmar contraseña"
-  },
-  "language": {
-    "selector": "Idioma"
-  }
+  "nav": { "home": "Inicio", "about": "Nosotros", "programs": "Programas", "donate": "Donar", "contact": "Contacto", "signIn": "Iniciar sesión", "getStarted": "Comenzar", "dashboard": "Panel", "profile": "Perfil", "adminPanel": "Panel de administración", "signOut": "Cerrar sesión", "getInvolved": "Participa", "impact": "Impacto", "news": "Noticias" },
+  "common": { "donateNow": "Donar ahora", "readMore": "Leer más", "viewAll": "Ver todo", "loading": "Cargando…", "livesImpacted": "Vidas impactadas", "countriesReached": "Países alcanzados", "communitiesServed": "Comunidades atendidas", "allRightsReserved": "Todos los derechos reservados.", "learnMore": "Aprender más", "checkBack": "Vuelve pronto." },
+  "home": { "heroBadge": "Transformando comunidades", "heroTitle": "Transformando vidas con", "heroHighlight": "Compasión", "heroSubtitle": "Somos los arquitectos del crecimiento comunitario, fusionando la innovación digital con el apoyo centrado en las personas para empoderar a los niños y estabilizar a las familias en necesidad.", "heroDonate": "Donar ahora", "heroCommunity": "Impacto comunitario", "storiesTitle": "Historias de", "storiesHighlight": "Resiliencia", "storiesSubtitle": "Sé testigo de los resultados tangibles de combinar la precisión digital con la compasión radical en el desarrollo comunitario.", "familiesSupported": "Familias apoyadas", "literacyIncrease": "Aumento de alfabetización", "viewAllProjects": "Ver todos los proyectos →", "newsletterBadge": "Conexión en vivo", "newsletterTitle": "Mantente conectado", "newsletterSubtitle": "Recibe actualizaciones sobre avances comunitarios, hitos de empoderamiento infantil y nuevas formas de brindar apoyo directo.", "newsletterPrivacy": "Únete a nuestra red de alquimistas digitales compasivos. Tu privacidad es nuestra prioridad.", "fuelTitle": "Alimenta el", "fuelHighlight": "Impacto Jade", "fuelSubtitle": "Tu contribución impulsa directamente nuestros programas de alfabetización digital y esfuerzos de estabilización familiar.", "moreThanMoney": "Más que dinero", "volunteerSubtitle": "Únete a nuestro equipo sobre el terreno o contribuye con tus habilidades digitales para ayudarnos a escalar nuestro impacto globalmente.", "becomeVolunteer": "Convertirse en voluntario →" },
+  "about": { "badge": "La Alquimia Digital", "title": "Nuestra Historia", "missionBadge": "Por qué existimos", "missionTitle": "Nuestra Misión", "visionBadge": "A dónde vamos", "visionTitle": "Nuestra Visión", "pillarsBadge": "Lo que defendemos", "pillarsTitle": "Pilares de Jade", "journeyBadge": "Nuestros hitos", "journeyTitle": "El Camino" },
+  "programs": { "heroBadge": "Nuestra Misión", "heroTitle": "Empoderando", "heroHighlight": "el Cambio", "heroSubtitle": "A través de la Innovación", "heroBody": "Cerrando la brecha entre el avance tecnológico y la necesidad humana para crear un impacto sostenible para las comunidades más vulnerables.", "exploreProjects": "Explorar proyectos", "viewAnnualReport": "Ver informe anual", "programs": "Programas", "projects": "Proyectos", "filterAll": "Todos", "filterOngoing": "En curso", "filterUpcoming": "Próximos", "filterCompleted": "Completados", "raised": "Recaudado", "donateToProject": "Donar al proyecto", "donorCount": "donantes", "noProjects": "Aún no se han publicado programas o proyectos.", "checkBack": "Vuelve pronto.", "completed": "Completado" },
+  "project": { "badge": "Detalle del proyecto", "goal": "Meta", "raised": "Recaudado", "donors": "Donantes", "status": "Estado", "donateNow": "Donar ahora", "backToPrograms": "← Volver a programas" },
+  "impact": { "heroBadge": "Nuestro Impacto", "heroTitle": "Historias de", "heroHighlight": "Cambio", "heroSubtitle": "Cada número representa una vida transformada. Cada historia es prueba de que la tecnología de precisión, usada con empatía radical, crea un cambio humano duradero.", "statLivesImpacted": "Vidas impactadas", "statLivesImpactedSub": "y contando", "statGlobalNetwork": "Red global", "statGlobalNetworkSub": "países alcanzados", "statAllocatedCapital": "Capital asignado", "statAllocatedCapitalSub": "desplegado en programas", "milestonesBadge": "Historias de impacto", "milestonesTitle": "Hitos de", "milestonesHighlight": "Éxito", "viewAllProjects": "Ver todos los proyectos →", "noImpact": "Aún no se han publicado historias de impacto.", "checkBack": "Vuelve pronto.", "alchemyBadge": "Historias de éxito", "alchemyTitle": "Esto no es solo ayuda,", "alchemyHighlight": "es alquimia.", "alchemySubtitle": "Voces reales. Cambio real. Las personas detrás de los números — compartiendo cómo la Fundación Jade D'Val transformó sus vidas.", "analyticsBadge": "Resultados basados en datos", "analyticsTitle": "Análisis de impacto", "analyticsHighlight": "de precisión", "analyticsSubtitle": "Medimos todo para que puedas confiar en que cada dólar, cada esfuerzo, está haciendo una diferencia mensurable.", "analyticsAchieved": "logrado", "analyticsGoal": "Meta", "analyticsBy": "para", "ctaBadge": "Toma acción", "ctaTitle": "Alimenta el", "ctaHighlight": "Impacto Jade", "ctaSubtitle": "Tu contribución impulsa comunidades, transforma vidas y escribe el próximo capítulo del cambio.", "ctaCustom": "Monto personalizado", "ctaDonate": "Donar ahora", "ctaDisclaimer": "El 100% de tu donación va directamente a nuestros programas. Pago seguro. Recibo fiscal incluido.", "detailGallery": "Galería", "detailBack": "← Volver a todas las historias de impacto", "detailContinueBadge": "Continúa el trabajo", "detailContinueTitle": "Sé parte de la próxima historia", "detailContinueSubtitle": "Tu donación nos ayuda a crear más historias como esta. Cada contribución — grande o pequeña — genera un cambio real.", "detailDonate": "Donar ahora →" },
+  "news": { "heroBadge": "Últimas actualizaciones", "heroTitle": "Noticias &", "heroHighlight": "Historias", "heroSubtitle": "Mantente informado con las últimas actualizaciones de nuestros programas, hitos comunitarios y noticias de la fundación.", "noPosts": "Aún no se han publicado artículos.", "checkBack": "Vuelve pronto.", "loadMore": "Cargar más artículos", "readMore": "Leer más →", "backToNews": "← Volver a noticias", "by": "Por", "share": "Compartir este artículo" },
+  "contact": { "badge": "Ponte en contacto", "title": "Apoyo inmediato.", "titleLine2": "Impacto real.", "subtitle": "Ya sea una emergencia o una llamada de ayuda, estamos aquí para responder con precisión y cuidado.", "phone": "Teléfono", "email": "Correo electrónico", "address": "Dirección", "followUs": "Síguenos", "faqBadge": "¿Tienes preguntas?", "faqTitle": "Preguntas", "faqHighlight": "frecuentes", "formBadge": "Escríbenos", "formTitle": "Enviar un mensaje", "name": "Nombre completo", "subject": "Asunto", "message": "Mensaje", "messagePlaceholder": "¿Cómo podemos ayudarte?", "send": "Enviar mensaje", "sending": "Enviando…", "successTitle": "¡Mensaje enviado!", "successMessage": "Gracias por contactarnos. Te responderemos en 24 horas.", "sendAnother": "Enviar otro mensaje" },
+  "getInvolved": { "heroBadge": "Únete al movimiento", "heroTitle": "Sé", "heroHighlight": "el cambio", "heroSubtitle": "Ya sea que aportes habilidades profesionales, alcance corporativo o pura pasión — hay un lugar para ti en nuestra misión.", "countriesReached": "Países alcanzados", "communitiesServed": "Comunidades atendidas", "livesImpacted": "Vidas impactadas", "ecosystemBadge": "Construir juntos", "ecosystemTitle": "El Ecosistema de", "ecosystemHighlight": "Asociación", "ecosystemSubtitle": "Construimos alianzas que multiplican el impacto. Desde voluntarios de base hasta corporaciones globales — todos tienen un papel en el movimiento Jade.", "individualBadge": "Para individuos", "individualTitle": "Asociación individual", "individualDesc": "Aporta tu experiencia, pasión y red para co-crear proyectos que sirvan directamente a las comunidades.", "corporateBadge": "Para organizaciones", "corporateTitle": "Alianza corporativa", "corporateDesc": "Alinea tus objetivos de RSC con la misión de Jade para un impacto comunitario medible y verificado a escala.", "partnershipPerks": "Beneficios del partnership", "tabVolunteer": "Voluntario", "tabVolunteerDesc": "Únete como profesional o experto", "tabIndividual": "Socio individual", "tabIndividualDesc": "Co-crear un proyecto con nosotros", "tabCorporate": "Socio corporativo", "tabCorporateDesc": "Asociación organizacional", "name": "Nombre completo", "email": "Correo electrónico", "phone": "Número de teléfono", "role": "¿Cómo te gustaría contribuir?", "expertise": "Área de experiencia", "yourStory": "Cuéntanos sobre ti", "submitApplication": "Enviar solicitud", "projectTitle": "Título del proyecto / Área de interés", "projectDesc": "Describe el proyecto o idea de colaboración", "submitPartnership": "Enviar solicitud de asociación", "contactPerson": "Persona de contacto", "workEmail": "Correo de trabajo", "orgName": "Nombre de la organización", "orgSize": "Tamaño de la organización", "proposedProject": "Proyecto / Iniciativa propuesta", "partnershipDesc": "Describe la oportunidad de asociación", "submitCorporate": "Enviar solicitud corporativa", "submitting": "Enviando…", "successTitle": "¡Gracias!", "successMessage": "Hemos recibido tu envío y nos pondremos en contacto dentro de 48 horas." },
+  "donate": { "badge": "Haz una diferencia", "title": "Cada dólar", "titleHighlight": "transforma", "titleEnd": "una vida", "subtitle": "Tu generosidad impulsa directamente nuestros programas de alfabetización digital, esfuerzos de estabilización familiar y proyectos de desarrollo comunitario.", "donatingTo": "Donando a", "makeADonation": "Hacer una donación", "support": "Apoyar", "statLives": "Vidas impactadas", "statPrograms": "A programas", "statResponse": "Resp. prom.", "trustSecure": "Pago seguro con Flutterwave", "trustEmail": "Correo de confirmación instantáneo enviado", "trustReport": "Total transparencia — rastrea tu impacto en nuestros informes", "orBankTransfer": "O transferencia bancaria", "bankTransferDetails": "Detalles de transferencia bancaria", "bankName": "Banco", "accountName": "Nombre de cuenta", "accountNumber": "Número de cuenta", "sortCode": "Código de clasificación", "swiftCode": "SWIFT / BIC", "reference": "Referencia", "useYourName": "Por favor usa tu nombre completo como referencia de pago.", "processingNote": "Permite 3–5 días hábiles para el procesamiento.", "customAmount": "Ingresa un monto personalizado", "payWithCard": "Pagar con tarjeta", "processing": "Procesando…", "successTitle": "¡Gracias!", "successMessage": "Tu donación ha sido recibida. Recibirás un correo de confirmación en breve.", "donateAgain": "Hacer otra donación", "disclaimer": "El 100% de tu donación va directamente a nuestros programas. Pago seguro. Recibo fiscal incluido." },
+  "footer": { "tagline": "Siendo pioneros en el futuro de la ayuda humanitaria a través de tecnología de precisión y empatía radical.", "foundation": "Fundación", "connect": "Conectar", "stayUpdated": "Mantenerse informado", "mission": "Misión", "ourTeam": "Nuestro equipo", "annualReport": "Informe anual", "governance": "Gobernanza", "helpCenter": "Centro de ayuda", "mediaKit": "Kit de medios", "partnerships": "Asociaciones", "careers": "Carreras", "allRightsReserved": "Todos los derechos reservados.", "quickLinks": "Enlaces rápidos", "programsTitle": "Programas", "contact": "Contacto" },
+  "newsletter": { "placeholder": "Tu correo electrónico", "subscribe": "Suscribirse", "joining": "Uniéndose…", "success": "¡Estás dentro!", "joinMission": "Unirse a la misión" },
+  "stats": { "livesImpacted": "Vidas impactadas", "programs": "Programas", "communities": "Comunidades", "volunteers": "Voluntarios" },
+  "language": { "selector": "Idioma" }
 }

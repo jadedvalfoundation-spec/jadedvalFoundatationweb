@@ -1,12 +1,14 @@
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import ContactForm from "@/components/shared/ContactForm";
 import FaqAccordion from "@/components/shared/FaqAccordion";
+import { translateMany } from "@/lib/translate";
 
 export const metadata = { title: "Contact Us — Jade D'Val Foundation" };
 
@@ -34,12 +36,20 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const info = await getInfo();
+  const [info, dict] = await Promise.all([getInfo(), getDictionary(lang as Locale)]);
+  const d = dict.contact;
 
   const phone = info?.contactPhone || "+1 (555) 824-JADE";
   const email = info?.contactEmail || "hello@jadedval.org";
   const address = info?.officeAddress || "77 Alchemy Way, Tech District\nInnovation City, 10110";
-  const faqs = info?.faqs ?? [];
+  const rawFaqs = info?.faqs ?? [];
+
+  // Translate FAQ questions and answers for non-English locales
+  const faqs = lang === "en" ? rawFaqs : await (async () => {
+    const questions = await translateMany(rawFaqs.map(f => f.question), lang as Locale);
+    const answers = await translateMany(rawFaqs.map(f => f.answer), lang as Locale);
+    return rawFaqs.map((f, i) => ({ question: questions[i], answer: answers[i] }));
+  })();
 
   const hasSocial = info?.facebook || info?.twitter || info?.instagram || info?.youtube;
 
@@ -54,19 +64,12 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
 
             {/* Left: info */}
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-brand">
-                Get In Touch
-              </span>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.badge}</span>
               <h1 className="mt-3 font-heading text-4xl font-bold leading-tight text-white sm:text-5xl">
-                Immediate Support.{" "}
-                <em className="not-italic text-brand">Real Impact.</em>
+                {d.title}{" "}
+                <em className="not-italic text-brand">{d.titleLine2}</em>
               </h1>
-              <p className="mt-5 text-gray-400 leading-relaxed">
-                Whether it&apos;s an emergency or a call for help, we&apos;re here to respond.
-                Our mission is simple: connect people in distress to the assistance
-                they need — quickly and effectively. Because help should never be
-                out of reach.
-              </p>
+              <p className="mt-5 text-gray-400 leading-relaxed">{d.subtitle}</p>
 
               {/* Contact details */}
               <div className="mt-10 space-y-6">
@@ -78,7 +81,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Phone</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500">{d.phone}</p>
                     <a href={`tel:${phone.replace(/\s/g, "")}`} className="mt-1 text-white hover:text-brand transition-colors">
                       {phone}
                     </a>
@@ -93,7 +96,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Email</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500">{d.email}</p>
                     <a href={`mailto:${email}`} className="mt-1 text-white hover:text-brand transition-colors">
                       {email}
                     </a>
@@ -110,7 +113,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                     </svg>
                   </div>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Headquarters</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500">{d.address}</p>
                     <p className="mt-1 whitespace-pre-line text-white">{address}</p>
                   </div>
                 </div>
@@ -119,7 +122,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
               {/* Social */}
               {hasSocial && (
                 <div className="mt-10">
-                  <p className="text-xs font-bold uppercase tracking-widest text-gray-500">Follow our journey</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-gray-500">{d.followUs}</p>
                   <div className="mt-4 flex gap-3">
                     {info?.facebook && (
                       <a href={info.facebook} target="_blank" rel="noopener noreferrer"
@@ -174,7 +177,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
         <section className="py-20" style={{ background: "#0a1520" }}>
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
             <h2 className="mb-10 text-center font-heading text-3xl font-bold text-white">
-              Frequently Asked Questions
+              {d.faqTitle} <em className="not-italic text-brand">{d.faqHighlight}</em>
             </h2>
             <FaqAccordion items={faqs} />
           </div>

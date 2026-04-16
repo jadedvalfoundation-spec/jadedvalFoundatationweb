@@ -1,85 +1,17 @@
 {
-  "nav": {
-    "home": "首页",
-    "about": "关于我们",
-    "programs": "项目",
-    "donate": "捐款",
-    "contact": "联系我们",
-    "signIn": "登录",
-    "getStarted": "立即开始",
-    "dashboard": "控制台",
-    "profile": "个人资料",
-    "adminPanel": "管理面板",
-    "signOut": "退出登录",
-    "getInvolved": "参与其中",
-    "impact": "影响",
-    "news": "新闻"
-  },
-  "hero": {
-    "title": "携手共建更强大的社区",
-    "subtitle": "贾德瓦尔基金会致力于通过教育、医疗保健和可持续社区发展赋能生活。",
-    "donateNow": "立即捐款",
-    "ourPrograms": "我们的项目"
-  },
-  "stats": {
-    "livesImpacted": "受益人数",
-    "programs": "项目数",
-    "communities": "社区数",
-    "volunteers": "志愿者"
-  },
-  "programs": {
-    "heading": "我们的核心项目",
-    "subheading": "我们开展有影响力的项目，在多个领域创造持久变革。",
-    "education": {
-      "title": "教育",
-      "description": "为贫困学生提供奖学金、学习用品和辅导。"
-    },
-    "healthcare": {
-      "title": "医疗保健",
-      "description": "为社区提供免费医疗外展服务、健康筛查和健康项目。"
-    },
-    "skills": {
-      "title": "技能培训",
-      "description": "职业培训和创业项目，促进经济独立。"
-    },
-    "community": {
-      "title": "社区发展",
-      "description": "改善居住条件和社区福祉的基础设施项目。"
-    },
-    "youth": {
-      "title": "青年赋能",
-      "description": "为年轻人提供领导力培训、体育和文化项目。"
-    },
-    "environment": {
-      "title": "环境保护",
-      "description": "植树活动、清洁行动和可持续发展教育倡议。"
-    }
-  },
-  "cta": {
-    "heading": "准备好创造改变了吗？",
-    "subheading": "加入我们创建更美好世界的使命。每一份贡献都至关重要。",
-    "joinUs": "加入我们",
-    "contactUs": "联系我们"
-  },
-  "footer": {
-    "tagline": "通过教育、医疗保健和可持续发展赋能社区。",
-    "quickLinks": "快速链接",
-    "programsTitle": "项目",
-    "contact": "联系方式",
-    "allRightsReserved": "版权所有。"
-  },
-  "auth": {
-    "signIn": "登录",
-    "signUp": "注册",
-    "email": "电子邮件",
-    "password": "密码",
-    "forgotPassword": "忘记密码？",
-    "noAccount": "没有账户？",
-    "hasAccount": "已有账户？",
-    "fullName": "全名",
-    "confirmPassword": "确认密码"
-  },
-  "language": {
-    "selector": "语言"
-  }
+  "nav": { "home": "首页", "about": "关于我们", "programs": "项目计划", "donate": "捐款", "contact": "联系我们", "signIn": "登录", "getStarted": "开始", "dashboard": "控制台", "profile": "个人资料", "adminPanel": "管理面板", "signOut": "退出登录", "getInvolved": "参与其中", "impact": "影响力", "news": "新闻" },
+  "common": { "donateNow": "立即捐款", "readMore": "阅读更多", "viewAll": "查看全部", "loading": "加载中…", "livesImpacted": "受益人数", "countriesReached": "覆盖国家", "communitiesServed": "服务社区", "allRightsReserved": "版权所有。", "learnMore": "了解更多", "checkBack": "请稍后回来查看。" },
+  "home": { "heroBadge": "改变社区", "heroTitle": "以", "heroHighlight": "爱心", "heroSubtitle": "改变生活，我们是社区成长的设计师，将数字创新与以人为本的支持相融合，为有需要的儿童和家庭赋能。", "heroDonate": "立即捐款", "heroCommunity": "社区影响", "storiesTitle": "坚韧", "storiesHighlight": "的故事", "storiesSubtitle": "见证将数字精准与根本性关怀结合在社区发展中所带来的切实成果。", "familiesSupported": "受助家庭", "literacyIncrease": "识字率提升", "viewAllProjects": "查看所有项目 →", "newsletterBadge": "实时连接", "newsletterTitle": "保持联系", "newsletterSubtitle": "接收社区突破、儿童赋权里程碑以及提供直接支持新方式的最新动态。", "newsletterPrivacy": "加入我们富有同情心的数字炼金师网络。您的隐私是我们的首要任务。", "fuelTitle": "为", "fuelHighlight": "翡翠影响力", "fuelSubtitle": "您的捐助直接推动我们的数字扫盲计划和家庭稳定工作。", "moreThanMoney": "不只是金钱", "volunteerSubtitle": "加入我们的一线团队或贡献您的数字技能，帮助我们在全球扩大影响力。", "becomeVolunteer": "成为志愿者 →" },
+  "about": { "badge": "数字炼金术", "title": "我们的故事", "missionBadge": "我们存在的意义", "missionTitle": "我们的使命", "visionBadge": "我们的目标", "visionTitle": "我们的愿景", "pillarsBadge": "我们的理念", "pillarsTitle": "翡翠支柱", "journeyBadge": "我们的里程碑", "journeyTitle": "发展历程" },
+  "programs": { "heroBadge": "我们的使命", "heroTitle": "赋能", "heroHighlight": "变革", "heroSubtitle": "通过创新", "heroBody": "弥合技术进步与人类需要之间的差距，为最脆弱的社区创造可持续影响。", "exploreProjects": "探索项目", "viewAnnualReport": "查看年度报告", "programs": "计划", "projects": "项目", "filterAll": "全部", "filterOngoing": "进行中", "filterUpcoming": "即将开始", "filterCompleted": "已完成", "raised": "已筹集", "donateToProject": "为项目捐款", "donorCount": "位捐款人", "noProjects": "暂无已发布的计划或项目。", "checkBack": "请稍后回来查看。", "completed": "已完成" },
+  "project": { "badge": "项目详情", "goal": "目标", "raised": "已筹集", "donors": "捐款人", "status": "状态", "donateNow": "立即捐款", "backToPrograms": "← 返回计划列表" },
+  "impact": { "heroBadge": "我们的影响力", "heroTitle": "改变", "heroHighlight": "的故事", "heroSubtitle": "每一个数字代表一个改变的生命。每一个故事都证明，以根本性同理心运用精准技术，能够创造持久的人类变革。", "statLivesImpacted": "受益人数", "statLivesImpactedSub": "持续增长中", "statGlobalNetwork": "全球网络", "statGlobalNetworkSub": "覆盖国家", "statAllocatedCapital": "已拨款项", "statAllocatedCapitalSub": "投入各项计划", "milestonesBadge": "影响力故事", "milestonesTitle": "成功", "milestonesHighlight": "里程碑", "viewAllProjects": "查看所有项目 →", "noImpact": "暂无已发布的影响力故事。", "checkBack": "请稍后回来查看。", "alchemyBadge": "成功故事", "alchemyTitle": "这不仅仅是援助，", "alchemyHighlight": "这是炼金术。", "alchemySubtitle": "真实的声音。真实的改变。数字背后的人们——分享翡翠D'Val基金会如何改变了他们的生活。", "analyticsBadge": "数据驱动的成果", "analyticsTitle": "精准影响力", "analyticsHighlight": "分析", "analyticsSubtitle": "我们衡量一切，让您相信每一分钱、每一份努力都在产生可衡量的差异。", "analyticsAchieved": "已实现", "analyticsGoal": "目标", "analyticsBy": "截至", "ctaBadge": "立即行动", "ctaTitle": "为翡翠", "ctaHighlight": "影响力", "ctaSubtitle": "您的捐助推动社区发展，改变生命，书写变革的下一个篇章。", "ctaCustom": "自定义金额", "ctaDonate": "立即捐款", "ctaDisclaimer": "您100%的捐款直接用于我们的计划。安全支付。提供税收收据。", "detailGallery": "图库", "detailBack": "← 返回所有影响力故事", "detailContinueBadge": "继续这项工作", "detailContinueTitle": "成为下一个故事的一部分", "detailContinueSubtitle": "您的捐款帮助我们创造更多这样的故事。每一份贡献——无论大小——都推动真实的改变。", "detailDonate": "立即捐款 →" },
+  "news": { "heroBadge": "最新动态", "heroTitle": "新闻 &", "heroHighlight": "故事", "heroSubtitle": "了解我们计划、社区里程碑和基金会新闻的最新动态。", "noPosts": "暂无已发布的文章。", "checkBack": "请稍后回来查看。", "loadMore": "加载更多文章", "readMore": "阅读更多 →", "backToNews": "← 返回新闻", "by": "作者", "share": "分享这篇文章" },
+  "contact": { "badge": "联系我们", "title": "即时支持。", "titleLine2": "真实影响。", "subtitle": "无论是紧急情况还是求助呼声，我们都会以精准和关怀来回应。", "phone": "电话", "email": "电子邮件", "address": "地址", "followUs": "关注我们", "faqBadge": "有疑问？", "faqTitle": "常见", "faqHighlight": "问题", "formBadge": "写信给我们", "formTitle": "发送消息", "name": "全名", "subject": "主题", "message": "消息", "messagePlaceholder": "我们可以如何帮助您？", "send": "发送消息", "sending": "发送中…", "successTitle": "消息已发送！", "successMessage": "感谢您联系我们。我们将在24小时内回复您。", "sendAnother": "再发一条消息" },
+  "getInvolved": { "heroBadge": "加入这场运动", "heroTitle": "成为", "heroHighlight": "改变", "heroSubtitle": "无论您带来专业技能、企业影响力还是纯粹的热情——我们的使命中都有您的位置。", "countriesReached": "覆盖国家", "communitiesServed": "服务社区", "livesImpacted": "受益人数", "ecosystemBadge": "共同建设", "ecosystemTitle": "合作", "ecosystemHighlight": "生态系统", "ecosystemSubtitle": "我们建立倍增影响力的联盟。从草根志愿者到全球企业——每个人在翡翠运动中都扮演着角色。", "individualBadge": "面向个人", "individualTitle": "个人合作", "individualDesc": "带上您的专业知识、热情和人脉，共同创建直接服务社区的项目。", "corporateBadge": "面向机构", "corporateTitle": "企业联盟", "corporateDesc": "将您的CSR目标与翡翠的使命相结合，实现大规模可衡量、可验证的社区影响。", "partnershipPerks": "合作福利", "tabVolunteer": "志愿者", "tabVolunteerDesc": "以专业人士或专家身份加入", "tabIndividual": "个人合作伙伴", "tabIndividualDesc": "与我们共同创建项目", "tabCorporate": "企业合作伙伴", "tabCorporateDesc": "机构合作", "name": "全名", "email": "电子邮件地址", "phone": "电话号码", "role": "您希望如何贡献？", "expertise": "专业领域", "yourStory": "介绍一下您自己", "submitApplication": "提交申请", "projectTitle": "项目名称 / 兴趣领域", "projectDesc": "描述项目或合作想法", "submitPartnership": "提交合作申请", "contactPerson": "联系人", "workEmail": "工作邮箱", "orgName": "机构名称", "orgSize": "机构规模", "proposedProject": "拟议项目 / 计划", "partnershipDesc": "描述合作机会", "submitCorporate": "提交企业申请", "submitting": "提交中…", "successTitle": "感谢您！", "successMessage": "我们已收到您的提交，将在48小时内与您联系。" },
+  "donate": { "badge": "创造改变", "title": "每一分钱", "titleHighlight": "改变", "titleEnd": "一个生命", "subtitle": "您的慷慨直接推动我们的数字扫盲计划、家庭稳定工作和社区发展项目。", "donatingTo": "捐款至", "makeADonation": "进行捐款", "support": "支持", "statLives": "受益人数", "statPrograms": "用于计划", "statResponse": "平均响应", "trustSecure": "由Flutterwave提供安全支付", "trustEmail": "即时向您发送确认邮件", "trustReport": "完全透明——在我们的报告中追踪您的影响", "orBankTransfer": "或银行转账", "bankTransferDetails": "银行转账详情", "bankName": "银行", "accountName": "账户名", "accountNumber": "账户号码", "sortCode": "行号", "swiftCode": "SWIFT / BIC", "reference": "参考号", "useYourName": "请使用您的全名作为付款参考。", "processingNote": "请预留3-5个工作日处理时间。", "customAmount": "输入自定义金额", "payWithCard": "用卡支付", "processing": "处理中…", "successTitle": "感谢您！", "successMessage": "您的捐款已收到。您将很快收到确认邮件。", "donateAgain": "再次捐款", "disclaimer": "您100%的捐款直接用于我们的计划。安全支付。提供税收收据。" },
+  "footer": { "tagline": "通过精准技术和根本性同理心，引领人道主义援助的未来。", "foundation": "基金会", "connect": "联系", "stayUpdated": "保持更新", "mission": "使命", "ourTeam": "我们的团队", "annualReport": "年度报告", "governance": "治理", "helpCenter": "帮助中心", "mediaKit": "媒体包", "partnerships": "合作伙伴", "careers": "职业机会", "allRightsReserved": "版权所有。", "quickLinks": "快速链接", "programsTitle": "计划", "contact": "联系" },
+  "newsletter": { "placeholder": "输入您的电子邮件", "subscribe": "订阅", "joining": "加入中…", "success": "已成功加入！", "joinMission": "加入使命" },
+  "stats": { "livesImpacted": "受益人数", "programs": "计划", "communities": "社区", "volunteers": "志愿者" },
+  "language": { "selector": "语言" }
 }

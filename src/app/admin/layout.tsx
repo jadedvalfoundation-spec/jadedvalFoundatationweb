@@ -74,7 +74,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             className="mt-3"
             action={async () => {
               "use server";
-              await signOut({ redirectTo: "/admin/login" });
+              await signOut({ redirect: false });
+              redirect("/admin/login");
             }}
           >
             <button

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Locale } from "@/lib/i18n";
+import { useLocale } from "@/components/providers/LocaleProvider";
 
 export interface ProjectCard {
   _id: string;
@@ -31,12 +33,7 @@ interface ProgramsDisplayProps {
 
 type StatusFilter = "all" | "upcoming" | "ongoing" | "completed";
 
-const STATUS_TABS: { value: StatusFilter; label: string }[] = [
-  { value: "all", label: "All Projects" },
-  { value: "ongoing", label: "Ongoing" },
-  { value: "upcoming", label: "Upcoming" },
-  { value: "completed", label: "Completed" },
-];
+// Labels are set at render time via useLocale dict
 
 const STATUS_BADGE: Record<string, string> = {
   upcoming: "bg-blue-500/20 text-blue-300 border-blue-500/30",
@@ -55,6 +52,10 @@ function stripHtml(html: string) {
 }
 
 function ProjectCardUI({ project, lang }: { project: ProjectCard; lang: Locale }) {
+  const router = useRouter();
+  const { dict } = useLocale();
+  const d = dict.programs;
+  const dp = dict.project;
   const pct = project.targetAmount > 0
     ? Math.min(100, (project.raised / project.targetAmount) * 100)
     : 0;
@@ -87,7 +88,7 @@ function ProjectCardUI({ project, lang }: { project: ProjectCard; lang: Locale }
         <div className="absolute left-3 top-3">
           <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${STATUS_BADGE[project.status]}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[project.status]}`} />
-            {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+            {project.status === "ongoing" ? d.filterOngoing : project.status === "upcoming" ? d.filterUpcoming : d.filterCompleted}
           </span>
         </div>
       </div>
@@ -104,7 +105,7 @@ function ProjectCardUI({ project, lang }: { project: ProjectCard; lang: Locale }
         {/* Progress bar */}
         <div className="mt-4">
           <div className="mb-1.5 flex justify-between text-xs">
-            <span className="font-semibold text-brand">${project.raised.toLocaleString()} raised</span>
+            <span className="font-semibold text-brand">${project.raised.toLocaleString()} {d.raised}</span>
             <span className="text-gray-500">{pct.toFixed(0)}%</span>
           </div>
           <div className="h-1.5 w-full rounded-full bg-white/10">
@@ -114,20 +115,24 @@ function ProjectCardUI({ project, lang }: { project: ProjectCard; lang: Locale }
             />
           </div>
           <div className="mt-1.5 flex justify-between text-xs text-gray-500">
-            <span>{project.donorCount} donor{project.donorCount !== 1 ? "s" : ""}</span>
-            <span>Goal: ${project.targetAmount.toLocaleString()}</span>
+            <span>{project.donorCount} {d.donorCount}</span>
+            <span>{dp.goal}: ${project.targetAmount.toLocaleString()}</span>
           </div>
         </div>
 
         {/* Donate button for active projects */}
         {project.status !== "completed" && (
-          <div className="mt-4" onClick={(e) => e.preventDefault()}>
-            <a
-              href={`/${lang}/donate?project=${project._id}&name=${encodeURIComponent(project.name)}`}
+          <div className="mt-4">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(`/${lang}/donate?project=${project._id}&name=${encodeURIComponent(project.name)}`);
+              }}
               className="block w-full rounded-full bg-brand py-2.5 text-center text-xs font-bold uppercase tracking-widest text-white transition hover:bg-brand-dark"
             >
-              Donate Now
-            </a>
+              {d.donateToProject}
+            </button>
           </div>
         )}
       </div>
@@ -136,7 +141,16 @@ function ProjectCardUI({ project, lang }: { project: ProjectCard; lang: Locale }
 }
 
 export default function ProgramsDisplay({ programs, lang }: ProgramsDisplayProps) {
+  const { dict } = useLocale();
+  const d = dict.programs;
   const [activeFilter, setActiveFilter] = useState<StatusFilter>("all");
+
+  const STATUS_TABS: { value: StatusFilter; label: string }[] = [
+    { value: "all", label: d.filterAll },
+    { value: "ongoing", label: d.filterOngoing },
+    { value: "upcoming", label: d.filterUpcoming },
+    { value: "completed", label: d.filterCompleted },
+  ];
 
   // Count total projects per status across all programs
   const countByStatus = (status: StatusFilter) => {
@@ -188,7 +202,7 @@ export default function ProgramsDisplay({ programs, lang }: ProgramsDisplayProps
       <div className="py-16">
         {filteredPrograms.length === 0 ? (
           <div className="py-20 text-center text-gray-500">
-            No projects in this category yet.
+            {d.noProjects}
           </div>
         ) : (
           filteredPrograms.map((program, idx) => (
@@ -207,7 +221,7 @@ export default function ProgramsDisplay({ programs, lang }: ProgramsDisplayProps
                   )}
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-brand">
-                      {activeFilter !== "all" ? activeFilter : "All Projects"} · {program.projects.length} project{program.projects.length !== 1 ? "s" : ""}
+                      {activeFilter !== "all" ? activeFilter : d.filterAll} · {program.projects.length} {d.projects}
                     </p>
                     <h2 className="mt-1 font-heading text-2xl font-bold text-white sm:text-3xl">
                       {program.name}

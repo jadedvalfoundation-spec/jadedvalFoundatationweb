@@ -3,7 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
+import { translate } from "@/lib/translate";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import Impact from "@/models/Impact";
 import SuccessStory from "@/models/SuccessStory";
@@ -70,7 +72,12 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const { info, impacts, stories } = await getData();
+  const [{ info, impacts, stories }, dict] = await Promise.all([
+    getData(),
+    getDictionary(lang as Locale),
+  ]);
+  const d = dict.impact;
+  const dc = dict.common;
 
   const livesImpacted = (info as { impactMade?: number }).impactMade ?? 0;
   const countriesReached = (info as { countriesReached?: number }).countriesReached ?? 0;
@@ -88,7 +95,24 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
     image: string; story: string;
   }>;
 
-  const carouselStories = typedStories.map((s) => ({
+  // Translate dynamic content for non-English locales
+  const translatedImpacts = lang === "en" ? typedImpacts : await Promise.all(
+    typedImpacts.map(async (imp) => ({
+      ...imp,
+      title: await translate(imp.title, lang as Locale),
+      description: await translate(imp.description, lang as Locale),
+    }))
+  );
+
+  const translatedStories = lang === "en" ? typedStories : await Promise.all(
+    typedStories.map(async (s) => ({
+      ...s,
+      story: await translate(s.story, lang as Locale),
+      occupation: await translate(s.occupation, lang as Locale),
+    }))
+  );
+
+  const carouselStories = translatedStories.map((s) => ({
     _id: String(s._id),
     personName: s.personName,
     occupation: s.occupation,
@@ -126,15 +150,13 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
           <div className="max-w-3xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-brand">Our Impact</span>
+              <span className="text-xs font-semibold uppercase tracking-widest text-brand">{d.heroBadge}</span>
             </div>
             <h1 className="font-heading text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">
-              Stories of{" "}
-              <em className="not-italic text-brand">Change</em>
+              {d.heroTitle}{" "}
+              <em className="not-italic text-brand">{d.heroHighlight}</em>
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-gray-300">
-              Every number represents a life transformed. Every story is proof that precision technology, wielded with radical empathy, creates lasting human change.
-            </p>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-gray-300">{d.heroSubtitle}</p>
           </div>
         </div>
       </section>
@@ -144,9 +166,9 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {[
-              { value: livesImpacted > 0 ? fmtNumber(livesImpacted) : "120k+", label: "Lives Impacted", sub: "and counting" },
-              { value: countriesReached > 0 ? countriesReached + "+" : "40+", label: "Global Network", sub: "countries reached" },
-              { value: allocatedCapital > 0 ? fmtUSD(allocatedCapital) : "$2.4M+", label: "Allocated Capital", sub: "deployed to programs" },
+              { value: livesImpacted > 0 ? fmtNumber(livesImpacted) : "120k+", label: d.statLivesImpacted, sub: d.statLivesImpactedSub },
+              { value: countriesReached > 0 ? countriesReached + "+" : "40+", label: d.statGlobalNetwork, sub: d.statGlobalNetworkSub },
+              { value: allocatedCapital > 0 ? fmtUSD(allocatedCapital) : "$2.4M+", label: d.statAllocatedCapital, sub: d.statAllocatedCapitalSub },
             ].map((stat) => (
               <div key={stat.label} className="relative overflow-hidden rounded-2xl p-8 text-center" style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.15)" }}>
                 <div className="absolute -bottom-6 -right-6 h-24 w-24 rounded-full bg-brand/5" />
@@ -164,23 +186,23 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-brand">Impact Stories</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.milestonesBadge}</span>
               <h2 className="mt-2 font-heading text-4xl font-bold text-white">
-                Milestones of{" "}
-                <em className="not-italic text-brand">Success</em>
+                {d.milestonesTitle}{" "}
+                <em className="not-italic text-brand">{d.milestonesHighlight}</em>
               </h2>
             </div>
             <Link
               href={`/${lang}/programs`}
               className="shrink-0 rounded-full border border-brand/40 bg-brand/10 px-6 py-2.5 text-sm font-bold text-brand transition hover:bg-brand hover:text-white"
             >
-              View All Projects →
+              {d.viewAllProjects}
             </Link>
           </div>
 
-          {typedImpacts.length > 0 ? (
+          {translatedImpacts.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {typedImpacts.map((impact) => {
+              {translatedImpacts.map((impact) => {
                 const coverImage = impact.media.find((m) => m.type === "image");
                 const sectorColor = SECTOR_COLORS[impact.sector] ?? "#00CCBB";
                 return (
@@ -226,7 +248,7 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
                           {new Date(impact.createdAt as string).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                         </span>
                         <span className="text-xs font-semibold text-brand group-hover:underline">
-                          Read more →
+                          {dc.readMore} →
                         </span>
                       </div>
                     </div>
@@ -241,8 +263,8 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
             </div>
           ) : (
             <div className="py-20 text-center">
-              <p className="text-gray-500">No impact stories published yet.</p>
-              <p className="mt-2 text-sm text-gray-600">Check back soon.</p>
+              <p className="text-gray-500">{d.noImpact}</p>
+              <p className="mt-2 text-sm text-gray-600">{d.checkBack}</p>
             </div>
           )}
         </div>
@@ -257,14 +279,14 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
               <div className="lg:pt-8">
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand" />
-                  <span className="text-xs font-semibold uppercase tracking-widest text-brand">Success Stories</span>
+                  <span className="text-xs font-semibold uppercase tracking-widest text-brand">{d.alchemyBadge}</span>
                 </div>
                 <h2 className="font-heading text-4xl font-bold leading-tight text-white">
-                  This isn&apos;t just aid,{" "}
-                  <em className="not-italic text-brand">it&apos;s alchemy.</em>
+                  {d.alchemyTitle}{" "}
+                  <em className="not-italic text-brand">{d.alchemyHighlight}</em>
                 </h2>
                 <p className="mt-5 text-base leading-relaxed text-gray-400">
-                  Real voices. Real change. The people behind the numbers — sharing how the Jade D&apos;Val Foundation transformed their lives.
+                  {d.alchemySubtitle}
                 </p>
                 {/* decorative bar */}
                 <div className="mt-8 h-1 w-16 rounded-full bg-brand/40" />
@@ -284,13 +306,13 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
         <section className="py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-14 text-center">
-              <span className="text-xs font-bold uppercase tracking-widest text-brand">Data-Driven Results</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.analyticsBadge}</span>
               <h2 className="mt-2 font-heading text-4xl font-bold text-white">
-                Precision Impact{" "}
-                <em className="not-italic text-brand">Analytics</em>
+                {d.analyticsTitle}{" "}
+                <em className="not-italic text-brand">{d.analyticsHighlight}</em>
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-gray-400">
-                We measure everything so you can trust that every dollar, every effort, is making a measurable difference.
+                {d.analyticsSubtitle}
               </p>
             </div>
 
@@ -325,10 +347,10 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
                     </div>
 
                     <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
-                      <span>{item.value} achieved</span>
+                      <span>{item.value} {d.analyticsAchieved}</span>
                       <span>
-                        Goal: {item.goal}
-                        {item.goalYear ? ` by ${item.goalYear}` : ""}
+                        {d.analyticsGoal}: {item.goal}
+                        {item.goalYear ? ` ${d.analyticsBy} ${item.goalYear}` : ""}
                       </span>
                     </div>
                   </div>
@@ -349,13 +371,13 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
         />
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand">Take Action</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.ctaBadge}</span>
           <h2 className="mt-4 font-heading text-5xl font-bold leading-tight text-white">
-            Fuel the Jade{" "}
-            <em className="not-italic text-brand">Impact</em>
+            {d.ctaTitle}{" "}
+            <em className="not-italic text-brand">{d.ctaHighlight}</em>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-gray-400">
-            Your contribution powers communities, transforms lives, and writes the next chapter of change. Every amount makes a difference.
+            {d.ctaSubtitle}
           </p>
 
           {/* Amount chips */}
@@ -373,7 +395,7 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
               href={`/${lang}/donate`}
               className="rounded-full border border-white/20 px-7 py-3 text-sm font-bold text-white transition hover:border-brand hover:text-brand"
             >
-              Custom Amount
+              {d.ctaCustom}
             </Link>
           </div>
 
@@ -381,12 +403,12 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
             href={`/${lang}/donate`}
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-10 py-4 font-heading text-base font-bold text-white shadow-lg shadow-brand/30 transition hover:opacity-90"
           >
-            Donate Now
+            {d.ctaDonate}
             <span>→</span>
           </Link>
 
           <p className="mt-5 text-xs text-gray-600">
-            100% of your donation goes directly to our programs. Secure payment. Tax receipt provided.
+            {d.ctaDisclaimer}
           </p>
         </div>
       </section>

@@ -1,85 +1,17 @@
 {
-  "nav": {
-    "home": "الرئيسية",
-    "about": "من نحن",
-    "programs": "البرامج",
-    "donate": "تبرع",
-    "contact": "اتصل بنا",
-    "signIn": "تسجيل الدخول",
-    "getStarted": "ابدأ الآن",
-    "dashboard": "لوحة التحكم",
-    "profile": "الملف الشخصي",
-    "adminPanel": "لوحة الإدارة",
-    "signOut": "تسجيل الخروج",
-    "getInvolved": "شارك معنا",
-    "impact": "الأثر",
-    "news": "الأخبار"
-  },
-  "hero": {
-    "title": "بناء مجتمعات أقوى معاً",
-    "subtitle": "تكرّس مؤسسة جادفال جهودها لتمكين الأفراد من خلال التعليم والرعاية الصحية والتنمية المجتمعية المستدامة.",
-    "donateNow": "تبرع الآن",
-    "ourPrograms": "برامجنا"
-  },
-  "stats": {
-    "livesImpacted": "حياة تأثرت",
-    "programs": "البرامج",
-    "communities": "المجتمعات",
-    "volunteers": "المتطوعون"
-  },
-  "programs": {
-    "heading": "برامجنا الرئيسية",
-    "subheading": "ننفذ برامج مؤثرة تُحدث تغييراً دائماً في قطاعات متعددة.",
-    "education": {
-      "title": "التعليم",
-      "description": "توفير المنح الدراسية والمستلزمات المدرسية والإرشاد للطلاب المحتاجين."
-    },
-    "healthcare": {
-      "title": "الرعاية الصحية",
-      "description": "التوعية الطبية المجانية وفحوصات الصحة وبرامج العافية للمجتمعات."
-    },
-    "skills": {
-      "title": "التدريب المهني",
-      "description": "برامج التدريب المهني وريادة الأعمال التي تعزز الاستقلال الاقتصادي."
-    },
-    "community": {
-      "title": "التنمية المجتمعية",
-      "description": "مشاريع البنية التحتية التي تحسّن مستوى المعيشة ورفاهية المجتمع."
-    },
-    "youth": {
-      "title": "تمكين الشباب",
-      "description": "التدريب على القيادة والرياضة والبرامج الثقافية للشباب."
-    },
-    "environment": {
-      "title": "البيئة",
-      "description": "زراعة الأشجار وحملات التنظيف ومبادرات التثقيف بالاستدامة."
-    }
-  },
-  "cta": {
-    "heading": "هل أنت مستعد لإحداث فرق؟",
-    "subheading": "انضم إلينا في مهمتنا لخلق عالم أفضل. كل مساهمة لها أهمية.",
-    "joinUs": "انضم إلينا",
-    "contactUs": "تواصل معنا"
-  },
-  "footer": {
-    "tagline": "تمكين المجتمعات من خلال التعليم والرعاية الصحية والتنمية المستدامة.",
-    "quickLinks": "روابط سريعة",
-    "programsTitle": "البرامج",
-    "contact": "اتصل بنا",
-    "allRightsReserved": "جميع الحقوق محفوظة."
-  },
-  "auth": {
-    "signIn": "تسجيل الدخول",
-    "signUp": "إنشاء حساب",
-    "email": "البريد الإلكتروني",
-    "password": "كلمة المرور",
-    "forgotPassword": "نسيت كلمة المرور؟",
-    "noAccount": "ليس لديك حساب؟",
-    "hasAccount": "لديك حساب بالفعل؟",
-    "fullName": "الاسم الكامل",
-    "confirmPassword": "تأكيد كلمة المرور"
-  },
-  "language": {
-    "selector": "اللغة"
-  }
+  "nav": { "home": "الرئيسية", "about": "من نحن", "programs": "البرامج", "donate": "تبرع", "contact": "تواصل معنا", "signIn": "تسجيل الدخول", "getStarted": "ابدأ", "dashboard": "لوحة التحكم", "profile": "الملف الشخصي", "adminPanel": "لوحة الإدارة", "signOut": "تسجيل الخروج", "getInvolved": "شارك معنا", "impact": "التأثير", "news": "الأخبار" },
+  "common": { "donateNow": "تبرع الآن", "readMore": "اقرأ المزيد", "viewAll": "عرض الكل", "loading": "جاري التحميل…", "livesImpacted": "الأرواح المُؤثَّر فيها", "countriesReached": "الدول المستهدفة", "communitiesServed": "المجتمعات المخدومة", "allRightsReserved": "جميع الحقوق محفوظة.", "learnMore": "اعرف المزيد", "checkBack": "عد قريباً." },
+  "home": { "heroBadge": "تحويل المجتمعات", "heroTitle": "تحويل الحياة بـ", "heroHighlight": "التعاطف", "heroSubtitle": "نحن معماريو النمو المجتمعي، نمزج الابتكار الرقمي مع الدعم الإنساني لتمكين الأطفال واستقرار الأسر المحتاجة.", "heroDonate": "تبرع الآن", "heroCommunity": "التأثير المجتمعي", "storiesTitle": "قصص", "storiesHighlight": "الصمود", "storiesSubtitle": "اشهد النتائج الملموسة لدمج الدقة الرقمية مع التعاطف الجذري في التنمية المجتمعية.", "familiesSupported": "الأسر المدعومة", "literacyIncrease": "زيادة معدل القراءة والكتابة", "viewAllProjects": "عرض جميع المشاريع →", "newsletterBadge": "اتصال مباشر", "newsletterTitle": "ابقَ على تواصل", "newsletterSubtitle": "احصل على تحديثات حول إنجازات المجتمع ومعالم تمكين الطفل وطرق جديدة لتقديم الدعم المباشر.", "newsletterPrivacy": "انضم إلى شبكتنا من الخيميائيين الرقميين المتعاطفين. خصوصيتك أولويتنا.", "fuelTitle": "أَجِّج", "fuelHighlight": "تأثير جيد", "fuelSubtitle": "مساهمتك تدعم مباشرة برامج محو الأمية الرقمية وجهود استقرار الأسرة.", "moreThanMoney": "أكثر من مجرد مال", "volunteerSubtitle": "انضم إلى فريقنا الميداني أو ساهم بمهاراتك الرقمية لمساعدتنا في توسيع نطاق تأثيرنا عالمياً.", "becomeVolunteer": "كن متطوعاً →" },
+  "about": { "badge": "الخيمياء الرقمية", "title": "قصتنا", "missionBadge": "لماذا نحن موجودون", "missionTitle": "مهمتنا", "visionBadge": "إلى أين نتجه", "visionTitle": "رؤيتنا", "pillarsBadge": "ما نؤمن به", "pillarsTitle": "ركائز جيد", "journeyBadge": "معالمنا", "journeyTitle": "الرحلة" },
+  "programs": { "heroBadge": "مهمتنا", "heroTitle": "تمكين", "heroHighlight": "التغيير", "heroSubtitle": "من خلال الابتكار", "heroBody": "سد الفجوة بين التقدم التكنولوجي والحاجة الإنسانية لخلق تأثير مستدام للمجتمعات الأكثر هشاشة.", "exploreProjects": "استكشف المشاريع", "viewAnnualReport": "عرض التقرير السنوي", "programs": "البرامج", "projects": "المشاريع", "filterAll": "الكل", "filterOngoing": "جارٍ", "filterUpcoming": "قادم", "filterCompleted": "مكتمل", "raised": "تم جمعه", "donateToProject": "تبرع للمشروع", "donorCount": "متبرع", "noProjects": "لم يتم نشر أي برامج أو مشاريع بعد.", "checkBack": "عد قريباً.", "completed": "مكتمل" },
+  "project": { "badge": "تفاصيل المشروع", "goal": "الهدف", "raised": "تم جمعه", "donors": "المتبرعون", "status": "الحالة", "donateNow": "تبرع الآن", "backToPrograms": "← العودة إلى البرامج" },
+  "impact": { "heroBadge": "تأثيرنا", "heroTitle": "قصص", "heroHighlight": "التغيير", "heroSubtitle": "كل رقم يمثل حياة تحولت. كل قصة دليل على أن تقنية الدقة، متسلحة بتعاطف جذري، تخلق تغييراً إنسانياً دائماً.", "statLivesImpacted": "الأرواح المُؤثَّر فيها", "statLivesImpactedSub": "ولا تزال تتزايد", "statGlobalNetwork": "الشبكة العالمية", "statGlobalNetworkSub": "الدول المستهدفة", "statAllocatedCapital": "رأس المال المخصص", "statAllocatedCapitalSub": "مُوزَّع على البرامج", "milestonesBadge": "قصص التأثير", "milestonesTitle": "معالم", "milestonesHighlight": "النجاح", "viewAllProjects": "عرض جميع المشاريع →", "noImpact": "لم يتم نشر قصص تأثير بعد.", "checkBack": "عد قريباً.", "alchemyBadge": "قصص النجاح", "alchemyTitle": "هذه ليست مجرد مساعدة،", "alchemyHighlight": "إنها خيمياء.", "alchemySubtitle": "أصوات حقيقية. تغيير حقيقي. الأشخاص خلف الأرقام — يشاركون كيف حوّلت مؤسسة جيد دي فال حياتهم.", "analyticsBadge": "نتائج مستندة إلى البيانات", "analyticsTitle": "تحليلات التأثير", "analyticsHighlight": "الدقيقة", "analyticsSubtitle": "نقيس كل شيء حتى تتأكد أن كل دولار، كل جهد، يُحدث فارقاً قابلاً للقياس.", "analyticsAchieved": "تم تحقيقه", "analyticsGoal": "الهدف", "analyticsBy": "بحلول", "ctaBadge": "اتخذ الإجراء", "ctaTitle": "أَجِّج", "ctaHighlight": "تأثير جيد", "ctaSubtitle": "مساهمتك تُمكِّن المجتمعات وتُحوِّل الأرواح وتكتب الفصل التالي من التغيير.", "ctaCustom": "مبلغ مخصص", "ctaDonate": "تبرع الآن", "ctaDisclaimer": "100٪ من تبرعك يذهب مباشرة إلى برامجنا. دفع آمن. إيصال ضريبي متاح.", "detailGallery": "المعرض", "detailBack": "← العودة إلى جميع قصص التأثير", "detailContinueBadge": "واصل العمل", "detailContinueTitle": "كن جزءاً من القصة التالية", "detailContinueSubtitle": "تبرعك يساعدنا على خلق المزيد من القصص مثل هذه. كل مساهمة — كبيرة أو صغيرة — تُحرِّك تغييراً حقيقياً.", "detailDonate": "تبرع الآن →" },
+  "news": { "heroBadge": "آخر التحديثات", "heroTitle": "الأخبار &", "heroHighlight": "القصص", "heroSubtitle": "ابقَ مطلعاً على آخر تحديثات برامجنا ومعالم المجتمع وأخبار المؤسسة.", "noPosts": "لم يتم نشر مقالات بعد.", "checkBack": "عد قريباً.", "loadMore": "تحميل المزيد من المقالات", "readMore": "اقرأ المزيد →", "backToNews": "← العودة إلى الأخبار", "by": "بقلم", "share": "شارك هذا المقال" },
+  "contact": { "badge": "تواصل معنا", "title": "دعم فوري.", "titleLine2": "تأثير حقيقي.", "subtitle": "سواء كانت حالة طوارئ أو نداء للمساعدة، نحن هنا للاستجابة بدقة واهتمام.", "phone": "الهاتف", "email": "البريد الإلكتروني", "address": "العنوان", "followUs": "تابعنا", "faqBadge": "لديك أسئلة؟", "faqTitle": "الأسئلة", "faqHighlight": "الشائعة", "formBadge": "راسلنا", "formTitle": "أرسل رسالة", "name": "الاسم الكامل", "subject": "الموضوع", "message": "الرسالة", "messagePlaceholder": "كيف يمكننا مساعدتك؟", "send": "إرسال الرسالة", "sending": "جاري الإرسال…", "successTitle": "تم إرسال الرسالة!", "successMessage": "شكراً للتواصل معنا. سنرد عليك خلال 24 ساعة.", "sendAnother": "إرسال رسالة أخرى" },
+  "getInvolved": { "heroBadge": "انضم إلى الحركة", "heroTitle": "كن", "heroHighlight": "التغيير", "heroSubtitle": "سواء جلبت مهارات احترافية أو نطاق مؤسسي أو شغفاً خالصاً — هناك مكان لك في مهمتنا.", "countriesReached": "الدول المستهدفة", "communitiesServed": "المجتمعات المخدومة", "livesImpacted": "الأرواح المُؤثَّر فيها", "ecosystemBadge": "ابنِ معنا", "ecosystemTitle": "نظام", "ecosystemHighlight": "الشراكة", "ecosystemSubtitle": "نبني تحالفات تضاعف التأثير. من المتطوعين الشعبيين إلى الشركات العالمية — للجميع دور في حركة جيد.", "individualBadge": "للأفراد", "individualTitle": "شراكة فردية", "individualDesc": "أحضر خبرتك وشغفك وشبكتك لإنشاء مشاريع تخدم المجتمعات مباشرة.", "corporateBadge": "للمؤسسات", "corporateTitle": "تحالف مؤسسي", "corporateDesc": "قم بمواءمة أهدافك في المسؤولية الاجتماعية مع مهمة جيد لتأثير مجتمعي قابل للقياس والتحقق على نطاق واسع.", "partnershipPerks": "مزايا الشراكة", "tabVolunteer": "متطوع", "tabVolunteerDesc": "انضم كمحترف أو خبير", "tabIndividual": "شريك فردي", "tabIndividualDesc": "أنشئ مشروعاً معنا", "tabCorporate": "شريك مؤسسي", "tabCorporateDesc": "شراكة مؤسسية", "name": "الاسم الكامل", "email": "البريد الإلكتروني", "phone": "رقم الهاتف", "role": "كيف تريد المساهمة؟", "expertise": "مجال الخبرة", "yourStory": "أخبرنا عن نفسك", "submitApplication": "تقديم الطلب", "projectTitle": "عنوان المشروع / مجال الاهتمام", "projectDesc": "صف المشروع أو فكرة التعاون", "submitPartnership": "تقديم طلب الشراكة", "contactPerson": "الشخص المسؤول", "workEmail": "البريد المؤسسي", "orgName": "اسم المؤسسة", "orgSize": "حجم المؤسسة", "proposedProject": "المشروع / المبادرة المقترحة", "partnershipDesc": "صف فرصة الشراكة", "submitCorporate": "تقديم الطلب المؤسسي", "submitting": "جاري الإرسال…", "successTitle": "شكراً لك!", "successMessage": "لقد تلقينا طلبك وسنتواصل معك خلال 48 ساعة." },
+  "donate": { "badge": "اصنع فارقاً", "title": "كل دولار", "titleHighlight": "يحوِّل", "titleEnd": "حياة", "subtitle": "كرمك يُغذِّي مباشرة برامج محو الأمية الرقمية وجهود استقرار الأسرة ومشاريع التنمية المجتمعية.", "donatingTo": "التبرع لـ", "makeADonation": "قدِّم تبرعاً", "support": "دعم", "statLives": "الأرواح المُؤثَّر فيها", "statPrograms": "للبرامج", "statResponse": "متوسط وقت الاستجابة", "trustSecure": "دفع آمن بواسطة Flutterwave", "trustEmail": "يُرسَل إليك بريد تأكيد فوري", "trustReport": "شفافية كاملة — تتبع تأثيرك في تقاريرنا", "orBankTransfer": "أو تحويل بنكي", "bankTransferDetails": "تفاصيل التحويل البنكي", "bankName": "البنك", "accountName": "اسم الحساب", "accountNumber": "رقم الحساب", "sortCode": "الرمز البنكي", "swiftCode": "SWIFT / BIC", "reference": "المرجع", "useYourName": "يرجى استخدام اسمك الكامل كمرجع للدفع.", "processingNote": "يُرجى السماح بمدة 3-5 أيام عمل للمعالجة.", "customAmount": "أدخل مبلغاً مخصصاً", "payWithCard": "الدفع ببطاقة", "processing": "جاري المعالجة…", "successTitle": "شكراً لك!", "successMessage": "تم استلام تبرعك. ستتلقى بريداً إلكترونياً للتأكيد قريباً.", "donateAgain": "قدِّم تبرعاً آخر", "disclaimer": "100٪ من تبرعك يذهب مباشرة إلى برامجنا. دفع آمن. إيصال ضريبي متاح." },
+  "footer": { "tagline": "رواد مستقبل المساعدات الإنسانية من خلال تقنية الدقة والتعاطف الجذري.", "foundation": "المؤسسة", "connect": "تواصل", "stayUpdated": "ابقَ على اطلاع", "mission": "المهمة", "ourTeam": "فريقنا", "annualReport": "التقرير السنوي", "governance": "الحوكمة", "helpCenter": "مركز المساعدة", "mediaKit": "حقيبة الإعلام", "partnerships": "الشراكات", "careers": "الوظائف", "allRightsReserved": "جميع الحقوق محفوظة.", "quickLinks": "روابط سريعة", "programsTitle": "البرامج", "contact": "تواصل" },
+  "newsletter": { "placeholder": "أدخل بريدك الإلكتروني", "subscribe": "اشترك", "joining": "جارٍ الانضمام…", "success": "أنت الآن ضمن شبكتنا!", "joinMission": "انضم إلى المهمة" },
+  "stats": { "livesImpacted": "الأرواح المُؤثَّر فيها", "programs": "البرامج", "communities": "المجتمعات", "volunteers": "المتطوعون" },
+  "language": { "selector": "اللغة" }
 }

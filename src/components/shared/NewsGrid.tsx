@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { Locale } from "@/lib/i18n";
+import { useLocale } from "@/components/providers/LocaleProvider";
 
 interface BlogPost {
   _id: string;
@@ -32,6 +33,8 @@ function formatDate(dateStr: string) {
 }
 
 export default function NewsGrid({ initialPosts, total, lang, limit = 6 }: NewsGridProps) {
+  const { dict } = useLocale();
+  const d = dict.news;
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -96,7 +99,7 @@ export default function NewsGrid({ initialPosts, total, lang, limit = 6 }: NewsG
                     {post.description}
                   </p>
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand">
-                    Read More <span className="transition-transform group-hover:translate-x-1">→</span>
+                    {d.readMore} <span className="transition-transform group-hover:translate-x-1">→</span>
                   </span>
                 </div>
               </Link>
@@ -112,13 +115,13 @@ export default function NewsGrid({ initialPosts, total, lang, limit = 6 }: NewsG
             disabled={loading}
             className="rounded-full border border-brand px-10 py-3 text-sm font-bold uppercase tracking-widest text-brand transition hover:bg-brand hover:text-white disabled:opacity-50"
           >
-            {loading ? "Loading…" : "Load More Articles"}
+            {loading ? dict.common.loading : d.loadMore}
           </button>
         </div>
       )}
 
       {posts.length === 0 && (
-        <p className="py-20 text-center text-gray-500">No articles published yet.</p>
+        <p className="py-20 text-center text-gray-500">{d.noPosts}</p>
       )}
     </>
   );

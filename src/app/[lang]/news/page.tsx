@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import Blog from "@/models/Blog";
 import Navbar from "@/components/shared/Navbar";
@@ -22,7 +23,9 @@ async function getInitialPosts() {
         .lean(),
       Blog.countDocuments({ isPublished: true }),
     ]);
-    return { posts, total };
+    // Serialize mongoose docs to plain objects (ObjectId → string, Date → ISO string)
+    const serialized = JSON.parse(JSON.stringify(posts));
+    return { posts: serialized, total };
   } catch {
     return { posts: [], total: 0 };
   }
@@ -32,7 +35,11 @@ export default async function NewsPage({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const { posts, total } = await getInitialPosts();
+  const [{ posts, total }, dict] = await Promise.all([
+    getInitialPosts(),
+    getDictionary(lang as Locale),
+  ]);
+  const d = dict.news;
 
   return (
     <div className="min-h-screen bg-[#0c1620]">
@@ -44,13 +51,14 @@ export default async function NewsPage({ params }: { params: Promise<{ lang: str
           <div className="flex items-end justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-brand">
-                Stories &amp; Updates
+                {d.heroBadge}
               </span>
               <h1 className="mt-2 font-heading text-5xl font-bold text-white sm:text-6xl lg:text-7xl">
-                The Journal
+                {d.heroTitle}{" "}
+                <em className="not-italic text-brand">{d.heroHighlight}</em>
               </h1>
               <p className="mt-4 max-w-xl text-gray-400">
-                Archiving our digital evolution across the globe.
+                {d.heroSubtitle}
               </p>
             </div>
             {total > 0 && (

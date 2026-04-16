@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import Project from "@/models/Project";
@@ -43,7 +44,11 @@ export default async function DonatePage({
   const sp = await searchParams;
   if (!hasLocale(lang)) notFound();
 
-  const { info, project } = await getData(sp.project);
+  const [{ info, project }, dict] = await Promise.all([
+    getData(sp.project),
+    getDictionary(lang as Locale),
+  ]);
+  const d = dict.donate;
 
   const cookieStore = await cookies();
   const userCurrency = cookieStore.get("user_currency")?.value ?? "USD";
@@ -64,20 +69,20 @@ export default async function DonatePage({
 
           {/* Left — impact copy */}
           <div className="lg:sticky lg:top-24">
-            <span className="text-xs font-bold uppercase tracking-widest text-brand">Make a Difference</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.badge}</span>
             <h1 className="mt-3 font-heading text-4xl font-bold leading-tight text-white sm:text-5xl">
-              Every Dollar{" "}
-              <em className="not-italic text-brand">Transforms</em>{" "}
-              a Life
+              {d.title}{" "}
+              <em className="not-italic text-brand">{d.titleHighlight}</em>{" "}
+              {d.titleEnd}
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-gray-400">
-              Your generosity directly powers our digital literacy programs, family stabilisation efforts, and community development projects.
+              {d.subtitle}
             </p>
 
             {projectName && (
               <div className="mt-6 rounded-2xl p-5"
                 style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.3)" }}>
-                <p className="text-xs font-bold uppercase tracking-widest text-brand">Donating to</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-brand">{d.donatingTo}</p>
                 <p className="mt-1 font-heading text-lg font-bold text-white">{projectName}</p>
               </div>
             )}
@@ -85,9 +90,9 @@ export default async function DonatePage({
             {/* Impact stats */}
             <div className="mt-8 grid grid-cols-3 gap-4">
               {[
-                { value: impactMade > 0 ? (impactMade >= 1000 ? Math.round(impactMade / 1000) + "k+" : impactMade + "+") : "120k+", label: "Lives Impacted" },
-                { value: "100%", label: "To Programs" },
-                { value: "48h", label: "Avg. Response" },
+                { value: impactMade > 0 ? (impactMade >= 1000 ? Math.round(impactMade / 1000) + "k+" : impactMade + "+") : "120k+", label: d.statLives },
+                { value: "100%", label: d.statPrograms },
+                { value: "48h", label: d.statResponse },
               ].map((s) => (
                 <div key={s.label} className="rounded-xl p-4 text-center"
                   style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -100,9 +105,9 @@ export default async function DonatePage({
             {/* Trust signals */}
             <div className="mt-8 space-y-3">
               {[
-                { icon: "🔒", text: "Secure payment powered by Flutterwave" },
-                { icon: "📧", text: "Instant confirmation email sent to you" },
-                { icon: "📊", text: "Full transparency — track your impact in our reports" },
+                { icon: "🔒", text: d.trustSecure },
+                { icon: "📧", text: d.trustEmail },
+                { icon: "📊", text: d.trustReport },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-3 text-sm text-gray-400">
                   <span className="text-base">{item.icon}</span>
@@ -116,7 +121,7 @@ export default async function DonatePage({
           <div className="rounded-2xl p-6 sm:p-8"
             style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
             <h2 className="mb-6 font-heading text-xl font-bold text-white">
-              {projectName ? `Support "${projectName}"` : "Make a Donation"}
+              {projectName ? `${d.support} "${projectName}"` : d.makeADonation}
             </h2>
             <DonateForm
               projectId={projectId}

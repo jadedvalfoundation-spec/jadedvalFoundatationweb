@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import Program from "@/models/Program";
 import Project from "@/models/Project";
@@ -77,7 +78,11 @@ export default async function ProgramsPage({ params }: { params: Promise<{ lang:
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const { sections, totalPrograms, totalProjects } = await getData();
+  const [{ sections, totalPrograms, totalProjects }, dict] = await Promise.all([
+    getData(),
+    getDictionary(lang as Locale),
+  ]);
+  const d = dict.programs;
 
   return (
     <div className="min-h-screen bg-[#0c1620]">
@@ -98,43 +103,34 @@ export default async function ProgramsPage({ params }: { params: Promise<{ lang:
           <div className="max-w-2xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-brand">Our Mission</span>
+              <span className="text-xs font-semibold uppercase tracking-widest text-brand">{d.heroBadge}</span>
             </div>
 
             <h1 className="font-heading text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">
-              Empowering{" "}
-              <em className="not-italic text-brand">Change</em>{" "}
-              Through Innovation
+              {d.heroTitle}{" "}
+              <em className="not-italic text-brand">{d.heroHighlight}</em>{" "}
+              {d.heroSubtitle}
             </h1>
 
-            <p className="mt-6 text-lg leading-relaxed text-gray-400">
-              Bridging the gap between technological advancement and human necessity to create sustainable impact for the most vulnerable communities.
-            </p>
+            <p className="mt-6 text-lg leading-relaxed text-gray-400">{d.heroBody}</p>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href="#programs"
-                className="rounded-full border border-brand bg-brand/10 px-7 py-3 text-sm font-bold text-brand transition hover:bg-brand hover:text-white"
-              >
-                Explore Projects
+              <a href="#programs" className="rounded-full border border-brand bg-brand/10 px-7 py-3 text-sm font-bold text-brand transition hover:bg-brand hover:text-white">
+                {d.exploreProjects}
               </a>
-              <Link
-                href={`/${lang}/impact`}
-                className="rounded-full border border-white/20 px-7 py-3 text-sm font-bold text-white transition hover:border-brand hover:text-brand"
-              >
-                View Annual Report
+              <Link href={`/${lang}/impact`} className="rounded-full border border-white/20 px-7 py-3 text-sm font-bold text-white transition hover:border-brand hover:text-brand">
+                {d.viewAnnualReport}
               </Link>
             </div>
 
-            {/* Stats */}
             <div className="mt-10 flex gap-8">
               <div>
                 <p className="font-heading text-3xl font-bold text-brand">{totalPrograms}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-gray-500">Programs</p>
+                <p className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-gray-500">{d.programs}</p>
               </div>
               <div>
                 <p className="font-heading text-3xl font-bold text-brand">{totalProjects}</p>
-                <p className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-gray-500">Projects</p>
+                <p className="mt-0.5 text-xs font-semibold uppercase tracking-widest text-gray-500">{d.projects}</p>
               </div>
             </div>
           </div>
@@ -147,8 +143,8 @@ export default async function ProgramsPage({ params }: { params: Promise<{ lang:
           <ProgramsDisplay programs={sections} lang={lang as Locale} />
         ) : (
           <div className="py-32 text-center">
-            <p className="text-gray-500">No programs or projects published yet.</p>
-            <p className="mt-2 text-sm text-gray-600">Check back soon.</p>
+            <p className="text-gray-500">{d.noProjects}</p>
+            <p className="mt-2 text-sm text-gray-600">{d.checkBack}</p>
           </div>
         )}
       </div>

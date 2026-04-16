@@ -1,14 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "@/components/providers/LocaleProvider";
 
 type FormType = "volunteer" | "individual" | "corporate";
-
-const TABS: { value: FormType; label: string; icon: string; desc: string }[] = [
-  { value: "volunteer",  label: "Volunteer",              icon: "🤝", desc: "Offer your time and skills" },
-  { value: "individual", label: "Individual Partnership", icon: "👤", desc: "Partner with us on a project" },
-  { value: "corporate",  label: "Organisation Partnership", icon: "🏢", desc: "Corporate collaboration" },
-];
 
 const inputCls =
   "w-full rounded-lg border border-white/10 bg-[#0a1520] px-4 py-3 text-sm text-white placeholder-gray-500 outline-none focus:border-brand focus:ring-1 focus:ring-brand transition";
@@ -26,22 +21,26 @@ function Field({
 }
 
 function SuccessState({ message, onReset }: { message: string; onReset: () => void }) {
+  const { dict } = useLocale();
+  const d = dict.getInvolved;
   return (
     <div className="flex flex-col items-center py-12 text-center">
       <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand/20 text-3xl">✓</div>
-      <h3 className="font-heading text-xl font-bold text-white">Submission Received!</h3>
-      <p className="mt-2 text-gray-400">{message}</p>
+      <h3 className="font-heading text-xl font-bold text-white">{d.successTitle}</h3>
+      <p className="mt-2 text-gray-400">{message || d.successMessage}</p>
       <button
         onClick={onReset}
         className="mt-6 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white transition hover:border-brand hover:text-brand"
       >
-        Submit another
+        {dict.contact.sendAnother}
       </button>
     </div>
   );
 }
 
 function VolunteerForm() {
+  const { dict } = useLocale();
+  const d = dict.getInvolved;
   const [form, setForm] = useState({ name: "", email: "", phone: "", role: "", expertise: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [msg, setMsg] = useState("");
@@ -78,22 +77,22 @@ function VolunteerForm() {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Full Name">
+        <Field label={d.name}>
           <input required value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Your full name" className={inputCls} />
         </Field>
-        <Field label="Email Address">
+        <Field label={d.email}>
           <input type="email" required value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="your@email.com" className={inputCls} />
         </Field>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Phone (optional)">
+        <Field label={d.phone}>
           <input value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="+1 555 000 0000" className={inputCls} />
         </Field>
-        <Field label="Role / Title">
+        <Field label={d.role}>
           <input value={form.role} onChange={(e) => set("role", e.target.value)} placeholder="e.g. Software Engineer" className={inputCls} />
         </Field>
       </div>
-      <Field label="Area of Expertise">
+      <Field label={d.expertise}>
         <select value={form.expertise} onChange={(e) => set("expertise", e.target.value)} className={inputCls}>
           <option value="" className="bg-[#0a1520]">Select your expertise…</option>
           {["Technology / Engineering", "Healthcare / Medicine", "Education", "Finance / Accounting",
@@ -102,7 +101,7 @@ function VolunteerForm() {
           ))}
         </select>
       </Field>
-      <Field label="Tell us how you'd like to contribute">
+      <Field label={d.yourStory}>
         <textarea required rows={4} value={form.message} onChange={(e) => set("message", e.target.value)}
           placeholder="Describe your skills and how you'd like to get involved…"
           className={`${inputCls} resize-none`} />
@@ -110,13 +109,15 @@ function VolunteerForm() {
       {status === "error" && <p className="text-sm text-red-400">{msg}</p>}
       <button type="submit" disabled={status === "loading"}
         className="w-full rounded-full bg-brand py-3.5 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-dark disabled:opacity-60">
-        {status === "loading" ? "Submitting…" : "Apply to Volunteer"}
+        {status === "loading" ? d.submitting : d.submitApplication}
       </button>
     </form>
   );
 }
 
 function IndividualPartnershipForm() {
+  const { dict } = useLocale();
+  const d = dict.getInvolved;
   const [form, setForm] = useState({ name: "", email: "", phone: "", projectIdea: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [msg, setMsg] = useState("");
@@ -153,21 +154,21 @@ function IndividualPartnershipForm() {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Full Name">
+        <Field label={d.name}>
           <input required value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Your full name" className={inputCls} />
         </Field>
-        <Field label="Email Address">
+        <Field label={d.email}>
           <input type="email" required value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="your@email.com" className={inputCls} />
         </Field>
       </div>
-      <Field label="Phone (optional)">
+      <Field label={d.phone}>
         <input value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="+1 555 000 0000" className={inputCls} />
       </Field>
-      <Field label="Project Title / Idea">
+      <Field label={d.projectTitle}>
         <input required value={form.projectIdea} onChange={(e) => set("projectIdea", e.target.value)}
           placeholder="e.g. Digital Literacy Hub in Rural Communities" className={inputCls} />
       </Field>
-      <Field label="Describe your project and partnership goals">
+      <Field label={d.projectDesc}>
         <textarea required rows={5} value={form.message} onChange={(e) => set("message", e.target.value)}
           placeholder="Outline the project, expected outcomes, your role, and how Jade D'Val Foundation would be involved…"
           className={`${inputCls} resize-none`} />
@@ -175,13 +176,15 @@ function IndividualPartnershipForm() {
       {status === "error" && <p className="text-sm text-red-400">{msg}</p>}
       <button type="submit" disabled={status === "loading"}
         className="w-full rounded-full bg-brand py-3.5 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-dark disabled:opacity-60">
-        {status === "loading" ? "Submitting…" : "Send Partnership Proposal"}
+        {status === "loading" ? d.submitting : d.submitPartnership}
       </button>
     </form>
   );
 }
 
 function CorporatePartnershipForm() {
+  const { dict } = useLocale();
+  const d = dict.getInvolved;
   const [form, setForm] = useState({ name: "", email: "", phone: "", organization: "", size: "", projectIdea: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [msg, setMsg] = useState("");
@@ -219,18 +222,18 @@ function CorporatePartnershipForm() {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Contact Person">
+        <Field label={d.contactPerson}>
           <input required value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Full name" className={inputCls} />
         </Field>
-        <Field label="Work Email">
+        <Field label={d.workEmail}>
           <input type="email" required value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="contact@company.com" className={inputCls} />
         </Field>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Organisation Name">
+        <Field label={d.orgName}>
           <input required value={form.organization} onChange={(e) => set("organization", e.target.value)} placeholder="Your organisation" className={inputCls} />
         </Field>
-        <Field label="Organisation Size">
+        <Field label={d.orgSize}>
           <select value={form.size} onChange={(e) => set("size", e.target.value)} className={inputCls}>
             <option value="" className="bg-[#0a1520]">Select size…</option>
             {["1–10 employees", "11–50 employees", "51–200 employees", "201–1000 employees", "1000+ employees"].map((o) => (
@@ -239,14 +242,14 @@ function CorporatePartnershipForm() {
           </select>
         </Field>
       </div>
-      <Field label="Phone (optional)">
+      <Field label={d.phone}>
         <input value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="+1 555 000 0000" className={inputCls} />
       </Field>
-      <Field label="Project / Initiative Title">
+      <Field label={d.proposedProject}>
         <input required value={form.projectIdea} onChange={(e) => set("projectIdea", e.target.value)}
           placeholder="e.g. Co-Branded Innovation Lab for Youth Upskilling" className={inputCls} />
       </Field>
-      <Field label="Describe the partnership scope and goals">
+      <Field label={d.partnershipDesc}>
         <textarea required rows={5} value={form.message} onChange={(e) => set("message", e.target.value)}
           placeholder="Outline the initiative, your organisation's contribution, expected outcomes, and timeline…"
           className={`${inputCls} resize-none`} />
@@ -254,14 +257,24 @@ function CorporatePartnershipForm() {
       {status === "error" && <p className="text-sm text-red-400">{msg}</p>}
       <button type="submit" disabled={status === "loading"}
         className="w-full rounded-full bg-brand py-3.5 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-dark disabled:opacity-60">
-        {status === "loading" ? "Submitting…" : "Request Prospectus"}
+        {status === "loading" ? d.submitting : d.submitCorporate}
       </button>
     </form>
   );
 }
 
 export default function GetInvolvedForms() {
+  const { dict } = useLocale();
+  const d = dict.getInvolved;
   const [active, setActive] = useState<FormType>("volunteer");
+
+  const TABS: { value: FormType; label: string; icon: string; desc: string }[] = [
+    { value: "volunteer",  label: d.tabVolunteer,  icon: "🤝", desc: d.tabVolunteerDesc },
+    { value: "individual", label: d.tabIndividual, icon: "👤", desc: d.tabIndividualDesc },
+    { value: "corporate",  label: d.tabCorporate,  icon: "🏢", desc: d.tabCorporateDesc },
+  ];
+
+  const activeTab = TABS.find((t) => t.value === active);
 
   return (
     <div>
@@ -294,12 +307,10 @@ export default function GetInvolvedForms() {
       >
         <div className="mb-6 border-b pb-4" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
           <h3 className="font-heading text-xl font-bold text-white">
-            {TABS.find((t) => t.value === active)?.label}
+            {activeTab?.label}
           </h3>
           <p className="mt-1 text-sm text-gray-400">
-            {active === "volunteer" && "Join our team as a professional or expert volunteer. We'll match your skills to where they're needed most."}
-            {active === "individual" && "Have a project idea? Tell us how we can collaborate to bring it to life."}
-            {active === "corporate" && "Align your organisation's mission with ours. Let's build something impactful together."}
+            {activeTab?.desc}
           </p>
         </div>
 

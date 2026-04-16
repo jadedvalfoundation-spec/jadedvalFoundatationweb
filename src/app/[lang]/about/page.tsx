@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { translate, translateMany } from "@/lib/translate";
 
 async function getInfo() {
   try {
@@ -28,7 +30,9 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const info = await getInfo();
+  const [info, dict] = await Promise.all([getInfo(), getDictionary(lang as Locale)]);
+  const d = dict.about;
+  const dc = dict.common;
 
   const aboutUs = info?.aboutUs ?? "";
   const mission = info?.mission ?? "";
@@ -44,7 +48,10 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
     { icon: "♦", title: "Transparency", description: "Open-access reporting to ensure every contribution drives measurable impact." },
   ];
 
-  const displayPillars = pillars.length > 0 ? pillars : defaultPillars;
+  const rawPillars = pillars.length > 0 ? pillars : defaultPillars;
+  const pillarTitles = await translateMany(rawPillars.map(p => p.title), lang as Locale);
+  const pillarDescs = await translateMany(rawPillars.map(p => p.description), lang as Locale);
+  const displayPillars = rawPillars.map((p, i) => ({ ...p, title: pillarTitles[i], description: pillarDescs[i] }));
 
   const defaultJourney = [
     { date: "Jan 2024", title: "The Genesis", description: "Foundation established with an initial focus on regional digital literacy hubs." },
@@ -52,7 +59,10 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
     { date: "Present", title: "The Expansion", description: "Scaling operations globally, reaching over 50,000 lives through decentralized empowerment models." },
   ];
 
-  const displayJourney = journey.length > 0 ? journey : defaultJourney;
+  const rawJourney = journey.length > 0 ? journey : defaultJourney;
+  const journeyTitles = await translateMany(rawJourney.map(j => j.title), lang as Locale);
+  const journeyDescs = await translateMany(rawJourney.map(j => j.description), lang as Locale);
+  const displayJourney = rawJourney.map((j, i) => ({ ...j, title: journeyTitles[i], description: journeyDescs[i] }));
 
   return (
     <div className="min-h-screen bg-[#0c1620]">
@@ -64,12 +74,8 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
           <div className="grid items-start gap-12 lg:grid-cols-2">
             {/* Left: text */}
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-brand">
-                The Digital Alchemy
-              </span>
-              <h1 className="mt-3 font-heading text-4xl font-bold text-white sm:text-5xl">
-                Our Story
-              </h1>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.badge}</span>
+              <h1 className="mt-3 font-heading text-4xl font-bold text-white sm:text-5xl">{d.title}</h1>
               {aboutUs ? (
                 <div
                   className="rich-content mt-6 text-gray-400"
@@ -119,7 +125,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-2xl">
                 👁
               </div>
-              <h2 className="font-heading text-xl font-bold text-white">Vision</h2>
+              <h2 className="font-heading text-xl font-bold text-white">{d.visionTitle}</h2>
               {vision ? (
                 <div className="rich-content mt-3 text-gray-400" dangerouslySetInnerHTML={{ __html: vision }} />
               ) : (
@@ -135,7 +141,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-2xl">
                 🎯
               </div>
-              <h2 className="font-heading text-xl font-bold text-white">The Mission</h2>
+              <h2 className="font-heading text-xl font-bold text-white">{d.missionTitle}</h2>
               {mission ? (
                 <div className="rich-content mt-3 text-gray-400" dangerouslySetInnerHTML={{ __html: mission }} />
               ) : (
@@ -151,9 +157,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
       {/* ── The Pillars of Jade ────────────────────────────────────────────── */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-10 text-center font-heading text-3xl font-bold text-white">
-            The Pillars of Jade
-          </h2>
+          <h2 className="mb-10 text-center font-heading text-3xl font-bold text-white">{d.pillarsTitle}</h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {displayPillars.map((pillar, i) => (
               <div key={i} className="rounded-2xl p-6"
@@ -172,7 +176,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
       {/* ── Our Journey ───────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: "#0a1520" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-14 font-heading text-3xl font-bold text-white">Our Journey</h2>
+          <h2 className="mb-14 font-heading text-3xl font-bold text-white">{d.journeyTitle}</h2>
 
           {/* Timeline */}
           <div className="relative">
@@ -204,18 +208,14 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
       {/* ── CTA strip ─────────────────────────────────────────────────────── */}
       <section className="py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h2 className="font-heading text-3xl font-bold text-white">Be Part of the Story</h2>
-          <p className="mt-4 text-gray-400">
-            Whether you donate, volunteer, or partner with us — every action creates a ripple that transforms lives.
-          </p>
+          <h2 className="font-heading text-3xl font-bold text-white">{dict.impact.detailContinueTitle}</h2>
+          <p className="mt-4 text-gray-400">{dict.impact.detailContinueSubtitle}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href={`/${lang}/donate`}
-              className="rounded-full bg-brand px-8 py-3 text-sm font-bold text-white transition hover:bg-brand-dark">
-              Donate Now
+            <Link href={`/${lang}/donate`} className="rounded-full bg-brand px-8 py-3 text-sm font-bold text-white transition hover:bg-brand-dark">
+              {dc.donateNow}
             </Link>
-            <Link href={`/${lang}/get-involved`}
-              className="rounded-full border border-white/20 px-8 py-3 text-sm font-bold text-white transition hover:border-brand hover:text-brand">
-              Get Involved
+            <Link href={`/${lang}/get-involved`} className="rounded-full border border-white/20 px-8 py-3 text-sm font-bold text-white transition hover:border-brand hover:text-brand">
+              {dc.learnMore}
             </Link>
           </div>
         </div>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import NewsletterForm from "./NewsletterForm";
 
 interface FooterProps {
@@ -24,20 +25,24 @@ async function getSocialLinks() {
 }
 
 export default async function Footer({ lang }: FooterProps) {
-  const social = await getSocialLinks();
+  const [social, dict] = await Promise.all([
+    getSocialLinks(),
+    getDictionary(lang),
+  ]);
+  const d = dict.footer;
 
   const foundation = [
-    { label: "Mission", href: `/${lang}/about` },
-    { label: "Our Team", href: `/${lang}/about` },
-    { label: "Annual Report", href: `/${lang}/impact` },
-    { label: "Governance", href: `/${lang}/about` },
+    { label: d.mission,       href: `/${lang}/about` },
+    { label: d.ourTeam,       href: `/${lang}/about` },
+    { label: d.annualReport,  href: `/${lang}/impact` },
+    { label: d.governance,    href: `/${lang}/about` },
   ];
 
   const connect = [
-    { label: "Help Center", href: `/${lang}/contact` },
-    { label: "Media Kit", href: `/${lang}/contact` },
-    { label: "Partnerships", href: `/${lang}/get-involved` },
-    { label: "Careers", href: `/${lang}/get-involved` },
+    { label: d.helpCenter,   href: `/${lang}/contact` },
+    { label: d.mediaKit,     href: `/${lang}/contact` },
+    { label: d.partnerships, href: `/${lang}/get-involved` },
+    { label: d.careers,      href: `/${lang}/get-involved` },
   ];
 
   const hasSocial = social.facebook || social.twitter || social.instagram || social.youtube;
@@ -52,25 +57,19 @@ export default async function Footer({ lang }: FooterProps) {
             <Link href={`/${lang}`} className="font-heading text-base font-bold uppercase tracking-widest text-brand">
               Jade D&apos;Val Foundation
             </Link>
-            <p className="mt-3 text-sm leading-relaxed text-gray-400">
-              Pioneering the future of humanitarian aid through precision technology and radical empathy.
-            </p>
+            <p className="mt-3 text-sm leading-relaxed text-gray-400">{d.tagline}</p>
             {hasSocial && (
               <div className="mt-5 flex gap-3">
                 {social.facebook && (
                   <a href={social.facebook} target="_blank" rel="noopener noreferrer"
                     className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/10 text-brand transition hover:bg-brand hover:text-white">
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                    </svg>
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" /></svg>
                   </a>
                 )}
                 {social.twitter && (
                   <a href={social.twitter} target="_blank" rel="noopener noreferrer"
                     className="flex h-9 w-9 items-center justify-center rounded-full bg-brand/10 text-brand transition hover:bg-brand hover:text-white">
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
                   </a>
                 )}
                 {social.instagram && (
@@ -98,13 +97,11 @@ export default async function Footer({ lang }: FooterProps) {
 
           {/* Foundation links */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Foundation</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">{d.foundation}</h3>
             <ul className="mt-4 space-y-3">
               {foundation.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="text-sm text-gray-400 transition-colors hover:text-brand">
-                    {item.label}
-                  </Link>
+                  <Link href={item.href} className="text-sm text-gray-400 transition-colors hover:text-brand">{item.label}</Link>
                 </li>
               ))}
             </ul>
@@ -112,13 +109,11 @@ export default async function Footer({ lang }: FooterProps) {
 
           {/* Connect links */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Connect</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">{d.connect}</h3>
             <ul className="mt-4 space-y-3">
               {connect.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="text-sm text-gray-400 transition-colors hover:text-brand">
-                    {item.label}
-                  </Link>
+                  <Link href={item.href} className="text-sm text-gray-400 transition-colors hover:text-brand">{item.label}</Link>
                 </li>
               ))}
             </ul>
@@ -126,9 +121,9 @@ export default async function Footer({ lang }: FooterProps) {
 
           {/* Stay Updated */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Stay Updated</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">{d.stayUpdated}</h3>
             <p className="mt-3 text-sm text-gray-400">
-              Get updates on our latest projects and community stories.
+              {dict.home.newsletterSubtitle.split(".")[0]}.
             </p>
             <NewsletterForm compact />
           </div>
@@ -143,7 +138,7 @@ export default async function Footer({ lang }: FooterProps) {
             <Link href={`/${lang}/terms`} className="hover:text-brand">Terms of Use</Link>
           </div>
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} Jade D&apos;Val Foundation NGO. Compassion through Innovation.
+            © {new Date().getFullYear()} Jade D&apos;Val Foundation NGO. {d.tagline.split(".")[0]}.
           </p>
         </div>
       </div>

@@ -3,10 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import Impact from "@/models/Impact";
+import mongoose from "mongoose";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { translate } from "@/lib/translate";
 
 const SECTOR_COLORS: Record<string, string> = {
   Education: "#00CCBB",
@@ -22,7 +25,9 @@ const SECTOR_COLORS: Record<string, string> = {
 async function getImpact(id: string) {
   try {
     await connectDB();
-    const impact = await Impact.findOne({ _id: id, isPublished: true }).lean();
+    const oid = mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : null;
+    if (!oid) return null;
+    const impact = await Impact.findOne({ _id: oid, isPublished: true }).lean();
     return impact;
   } catch {
     return null;
@@ -37,13 +42,28 @@ export default async function ImpactDetailPage({
   const { lang, id } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const impact = await getImpact(id) as {
+  const [rawImpact, dict] = await Promise.all([
+    getImpact(id),
+    getDictionary(lang as Locale),
+  ]);
+  const d = dict.impact;
+  const dc = dict.common;
+
+  const impact = rawImpact as {
     _id: unknown; title: string; description: string; details: string;
     sector: string; media: Array<{ url: string; publicId: string; type: "image" | "video" }>;
     createdAt: unknown;
   } | null;
 
   if (!impact) notFound();
+
+  // Translate dynamic content for non-English
+  const [impactTitle, impactDescription] = lang === "en"
+    ? [impact.title, impact.description]
+    : await Promise.all([
+        translate(impact.title, lang as Locale),
+        translate(impact.description, lang as Locale),
+      ]);
 
   const sectorColor = SECTOR_COLORS[impact.sector] ?? "#00CCBB";
   const coverImage = impact.media.find((m) => m.type === "image");
@@ -71,9 +91,9 @@ export default async function ImpactDetailPage({
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="mb-6 flex items-center gap-2 text-xs text-gray-500" aria-label="Breadcrumb">
-            <Link href={`/${lang}/impact`} className="transition hover:text-brand">Impact</Link>
+            <Link href={`/${lang}/impact`} className="transition hover:text-brand">{d.heroBadge}</Link>
             <span>/</span>
-            <span className="text-gray-300 line-clamp-1">{impact.title}</span>
+            <span className="text-gray-300 line-clamp-1">{impactTitle}</span>
           </nav>
 
           {/* Sector badge */}
@@ -85,11 +105,11 @@ export default async function ImpactDetailPage({
           </span>
 
           <h1 className="font-heading text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl max-w-3xl">
-            {impact.title}
+            {impactTitle}
           </h1>
 
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-300">
-            {impact.description}
+            {impactDescription}
           </p>
 
           <p className="mt-4 text-sm text-gray-500">
@@ -112,7 +132,7 @@ export default async function ImpactDetailPage({
           {/* Additional media gallery */}
           {additionalMedia.length > 0 && (
             <div className="mt-16">
-              <h2 className="mb-6 font-heading text-xl font-bold text-white">Gallery</h2>
+              <h2 className="mb-6 font-heading text-xl font-bold text-white">{d.detailGallery}</h2>
               <div className={`grid gap-4 ${additionalMedia.length === 1 ? "grid-cols-1" : "grid-cols-2 md:grid-cols-3"}`}>
                 {additionalMedia.map((m, i) => (
                   <div key={i} className="group relative overflow-hidden rounded-xl bg-[#071018]">
@@ -145,7 +165,7 @@ export default async function ImpactDetailPage({
               href={`/${lang}/impact`}
               className="inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand/10 px-6 py-3 text-sm font-bold text-brand transition hover:bg-brand hover:text-white"
             >
-              ← Back to All Impact Stories
+              ← {d.detailBack}
             </Link>
           </div>
         </div>
@@ -157,18 +177,18 @@ export default async function ImpactDetailPage({
         style={{ background: "#071018", borderTop: "1px solid rgba(255,255,255,0.05)" }}
       >
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-brand">Continue the Work</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand">{d.detailContinueBadge}</p>
           <h3 className="mt-3 font-heading text-3xl font-bold text-white">
-            Be Part of the Next Story
+            {d.detailContinueTitle}
           </h3>
           <p className="mt-4 text-base leading-relaxed text-gray-400">
-            Your donation helps us create more stories like this one. Every contribution — big or small — drives real change.
+            {d.detailContinueSubtitle}
           </p>
           <Link
             href={`/${lang}/donate`}
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-10 py-4 font-heading text-base font-bold text-white shadow-lg shadow-brand/30 transition hover:opacity-90"
           >
-            Donate Now →
+            {dc.donateNow} →
           </Link>
         </div>
       </section>

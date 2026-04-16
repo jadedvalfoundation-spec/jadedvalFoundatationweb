@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useLocale } from "@/components/providers/LocaleProvider";
 
 declare global {
   interface Window {
@@ -46,6 +47,8 @@ export default function DonateForm({
   projectId, projectName, programId,
   flwPublicKey, bankDetails, userCurrency = "USD",
 }: DonateFormProps) {
+  const { dict } = useLocale();
+  const d = dict.donate;
   // currency state: "local" | "USD"
   const [currencyMode, setCurrencyMode] = useState<"local" | "USD">(
     userCurrency === "USD" ? "USD" : "local"
@@ -201,12 +204,11 @@ export default function DonateForm({
     return (
       <div className="flex flex-col items-center py-12 text-center">
         <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-brand/20 text-4xl">✓</div>
-        <h2 className="font-heading text-2xl font-bold text-white">Thank You!</h2>
+        <h2 className="font-heading text-2xl font-bold text-white">{d.successTitle}</h2>
         <p className="mt-2 text-gray-400">
-          Your donation of <span className="font-semibold text-brand">{symbol}{amountInActiveCurrency.toLocaleString()}</span> has been received.
+          {d.successMessage}
         </p>
-        {projectName && <p className="mt-1 text-sm text-gray-500">Directed to: {projectName}</p>}
-        <p className="mt-4 text-sm text-gray-500">A confirmation will be sent to {email}.</p>
+        {projectName && <p className="mt-1 text-sm text-gray-500">{d.donatingTo}: {projectName}</p>}
       </div>
     );
   }
@@ -216,18 +218,18 @@ export default function DonateForm({
     return (
       <div className="space-y-5">
         <div className="rounded-2xl border border-brand/30 bg-brand/10 p-5">
-          <h3 className="font-heading text-lg font-bold text-white">Complete Your Transfer</h3>
+          <h3 className="font-heading text-lg font-bold text-white">{d.bankTransferDetails}</h3>
           <p className="mt-1 text-sm text-gray-400">
             Please transfer <span className="font-bold text-brand">{symbol}{amountInActiveCurrency.toLocaleString()}</span> to the account below and use your name as reference.
           </p>
         </div>
         <div className="space-y-3 rounded-2xl p-5" style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
           {[
-            { label: "Bank", value: bankDetails.bankName },
-            { label: "Account Name", value: bankDetails.bankAccountName },
-            { label: "Account Number", value: bankDetails.bankAccountNumber },
-            { label: "Sort / Routing", value: bankDetails.bankSortCode },
-            { label: "SWIFT / BIC", value: bankDetails.bankSwiftCode },
+            { label: d.bankName, value: bankDetails.bankName },
+            { label: d.accountName, value: bankDetails.bankAccountName },
+            { label: d.accountNumber, value: bankDetails.bankAccountNumber },
+            { label: d.sortCode, value: bankDetails.bankSortCode },
+            { label: d.swiftCode, value: bankDetails.bankSwiftCode },
           ].filter((r) => r.value).map((row) => (
             <div key={row.label} className="flex justify-between border-b border-white/8 pb-2 last:border-0 last:pb-0">
               <span className="text-xs font-bold uppercase tracking-widest text-gray-500">{row.label}</span>
@@ -239,7 +241,7 @@ export default function DonateForm({
           <p className="rounded-xl bg-white/5 p-4 text-sm text-gray-400">{bankDetails.bankTransferNote}</p>
         )}
         <p className="text-xs text-gray-500 text-center">
-          Our team will confirm your donation within 2–3 business days.
+          {d.processingNote}
         </p>
       </div>
     );
@@ -269,7 +271,7 @@ export default function DonateForm({
 
       {/* Preset chips */}
       <div>
-        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">Select Amount</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">{d.customAmount}</p>
         <div className="grid grid-cols-5 gap-2">
           {presetAmounts.map((amt, i) => (
             <button
@@ -291,7 +293,7 @@ export default function DonateForm({
       {/* Custom amount */}
       <div>
         <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-gray-400">
-          Or Enter Custom Amount ({activeCurrency})
+          {d.customAmount} ({activeCurrency})
         </label>
         <div className="relative">
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-brand">{symbol}</span>
@@ -315,18 +317,18 @@ export default function DonateForm({
       {/* Donor info */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-gray-400">Full Name</label>
+          <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-gray-400">{dict.getInvolved.name}</label>
           <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" className={inputCls} />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-gray-400">Email Address</label>
+          <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-gray-400">{dict.getInvolved.email}</label>
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" className={inputCls} />
         </div>
       </div>
 
       {/* Payment method */}
       <div>
-        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">Payment Method</p>
+        <p className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">{d.payWithCard}</p>
         <div className="grid gap-3 sm:grid-cols-2">
           {flwPublicKey && (
             <button type="button" onClick={() => setPayMethod("flutterwave")}
@@ -381,11 +383,11 @@ export default function DonateForm({
         disabled={submitting || amountInActiveCurrency <= 0 || !name || !email}
         className="w-full rounded-full bg-brand py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-dark disabled:opacity-50"
       >
-        {submitting ? "Processing…" : payMethod === "bank_transfer" ? "Get Bank Details" : `Donate ${symbol}${amountInActiveCurrency > 0 ? amountInActiveCurrency.toLocaleString() : ""}`}
+        {submitting ? d.processing : payMethod === "bank_transfer" ? d.orBankTransfer : `${d.makeADonation} ${symbol}${amountInActiveCurrency > 0 ? amountInActiveCurrency.toLocaleString() : ""}`}
       </button>
 
       <p className="text-center text-xs text-gray-600">
-        Your contribution is secure and goes directly towards our programs.
+        {d.disclaimer}
       </p>
     </form>
   );
