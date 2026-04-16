@@ -9,6 +9,10 @@
   --brand-lighter: #e6faf9;
   --background: #ffffff;
   --foreground: #171717;
+  --site-bg: #0c1620;
+  --site-card: #0f1e2a;
+  --site-card-light: #132535;
+  --site-border: rgba(255,255,255,0.08);
 }
 
 @theme inline {
@@ -21,6 +25,9 @@
   --color-brand-lighter: var(--brand-lighter);
   --font-heading: var(--font-montserrat), sans-serif;
   --font-body: var(--font-inter), sans-serif;
+  --color-site-bg: var(--site-bg);
+  --color-site-card: var(--site-card);
+  --color-site-card-light: var(--site-card-light);
 }
 
 @media (prefers-color-scheme: dark) {

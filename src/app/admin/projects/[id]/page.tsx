@@ -25,7 +25,7 @@ async function getData(id: string) {
     { $group: { _id: { $dateToString: { format: "%b %Y", date: "$createdAt" } }, total: { $sum: "$amountUSD" } } },
     { $sort: { _id: 1 } }, { $limit: 6 },
   ]);
-  const recentDonors = await Donation.find({ project: (project as { _id: unknown })._id, status: "completed" })
+  const recentDonors = await Donation.find({ project: (project as { _id: unknown })._id as never, status: "completed" })
     .sort({ createdAt: -1 }).limit(10).select("donorName donorEmail amountUSD createdAt").lean();
 
   const amountRaised = raisedAgg[0]?.total ?? 0;

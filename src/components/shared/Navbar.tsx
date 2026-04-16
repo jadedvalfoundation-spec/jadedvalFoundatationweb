@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useLocale } from "@/components/providers/LocaleProvider";
 import { SUPPORTED_LOCALES, LOCALE_NAMES, type Locale } from "@/lib/i18n";
@@ -23,87 +22,83 @@ export default function Navbar({ lang }: NavbarProps) {
     const newPath = pathname.replace(/^\/[a-z]{2}(\/|$)/, `/${newLang}$1`);
     router.push(newPath);
     setLangOpen(false);
+    setMobileOpen(false);
+  }
+
+  function isActive(href: string) {
+    if (href === `/${lang}`) return pathname === href;
+    return pathname.startsWith(href);
   }
 
   const navLinks = [
-    { label: dict.nav.home, href: `/${lang}` },
-    { label: dict.nav.about, href: `/${lang}/about` },
-    { label: dict.nav.programs, href: `/${lang}/programs` },
-    { label: dict.nav.donate, href: `/${lang}/donate` },
+    { label: "Home", href: `/${lang}` },
+    { label: "About Us", href: `/${lang}/about` },
+    { label: "Programs", href: `/${lang}/programs` },
+    { label: "Get Involved", href: `/${lang}/get-involved` },
+    { label: "Impact", href: `/${lang}/impact` },
+    { label: "News", href: `/${lang}/news` },
+    { label: "Contact", href: `/${lang}/contact` },
   ];
 
+  const flagEmoji: Record<string, string> = {
+    en: "🇬🇧", es: "🇪🇸", fr: "🇫🇷", ar: "🇸🇦", zh: "🇨🇳",
+  };
+
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
+    <nav className="sticky top-0 z-50 bg-[#0c1620]" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href={`/${lang}`} className="flex items-center gap-2">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black">
-              <Image
-                src="/logo.png"
-                alt="Jade D'Val Foundation"
-                width={40}
-                height={40}
-                className="h-10 w-10 object-cover"
-                priority
-              />
-            </div>
-            <span className="hidden font-heading text-lg font-bold text-gray-900 sm:block">
-              Jadedval Foundation
-            </span>
+
+          {/* Brand */}
+          <Link href={`/${lang}`} className="font-heading text-lg font-bold text-white whitespace-nowrap">
+            Jade D&apos;Val Foundation
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden items-center gap-6 md:flex">
+          {/* Desktop nav */}
+          <div className="hidden items-center gap-1 lg:flex">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-gray-600 transition-colors hover:text-brand"
+                className={`relative px-3 py-2 text-sm transition-colors ${
+                  isActive(link.href)
+                    ? "text-brand"
+                    : "text-gray-300 hover:text-white"
+                }`}
               >
                 {link.label}
+                {isActive(link.href) && (
+                  <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-brand" />
+                )}
               </Link>
             ))}
           </div>
 
-          {/* Right side: Language selector + Donate CTA */}
-          <div className="flex items-center gap-3">
-            {/* Language Selector */}
+          {/* Right: lang selector + donate */}
+          <div className="flex items-center gap-2">
+            {/* Language selector */}
             <div className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
-                aria-label={dict.language.selector}
-                className="flex items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-gray-600 hover:border-brand hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
+                aria-label={dict.language?.selector ?? "Language"}
+                className="flex items-center gap-1 rounded-md px-2 py-1 text-sm text-gray-400 hover:text-white focus:outline-none"
               >
-                <span className="text-base leading-none">
-                  {lang === "en" && "🇬🇧"}
-                  {lang === "es" && "🇪🇸"}
-                  {lang === "fr" && "🇫🇷"}
-                  {lang === "ar" && "🇸🇦"}
-                  {lang === "zh" && "🇨🇳"}
-                </span>
-                <span className="hidden sm:inline">{LOCALE_NAMES[lang]}</span>
+                <span className="text-base leading-none">{flagEmoji[lang]}</span>
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {langOpen && (
-                <div className="absolute right-0 mt-1 w-40 rounded-md border border-gray-200 bg-white py-1 shadow-lg">
+                <div className="absolute right-0 mt-1 w-40 rounded-xl border border-white/10 bg-[#0f1e2a] py-1 shadow-xl">
                   {SUPPORTED_LOCALES.map((locale) => (
                     <button
                       key={locale}
                       onClick={() => switchLocale(locale)}
-                      className={`flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-brand-lighter hover:text-brand-darker ${
-                        locale === lang ? "font-semibold text-brand" : "text-gray-700"
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:text-brand ${
+                        locale === lang ? "font-semibold text-brand" : "text-gray-300"
                       }`}
                     >
-                      <span>
-                        {locale === "en" && "🇬🇧"}
-                        {locale === "es" && "🇪🇸"}
-                        {locale === "fr" && "🇫🇷"}
-                        {locale === "ar" && "🇸🇦"}
-                        {locale === "zh" && "🇨🇳"}
-                      </span>
+                      <span>{flagEmoji[locale]}</span>
                       {LOCALE_NAMES[locale]}
                     </button>
                   ))}
@@ -111,17 +106,17 @@ export default function Navbar({ lang }: NavbarProps) {
               )}
             </div>
 
-            {/* Donate CTA (desktop) */}
+            {/* Donate button */}
             <Link
               href={`/${lang}/donate`}
-              className="hidden rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark sm:block"
+              className="hidden rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark sm:block"
             >
-              {dict.nav.donate}
+              Donate Now
             </Link>
 
-            {/* Mobile hamburger */}
+            {/* Hamburger */}
             <button
-              className="rounded-md p-2 text-gray-600 hover:bg-gray-100 md:hidden"
+              className="rounded-md p-2 text-gray-400 hover:text-white lg:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
@@ -139,14 +134,18 @@ export default function Navbar({ lang }: NavbarProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-gray-200 bg-white md:hidden">
-          <div className="space-y-1 px-4 py-3">
+        <div className="border-t border-white/10 bg-[#0c1620] lg:hidden">
+          <div className="space-y-0.5 px-4 py-3">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="block rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-brand-lighter hover:text-brand"
                 onClick={() => setMobileOpen(false)}
+                className={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  isActive(link.href)
+                    ? "bg-brand/10 text-brand"
+                    : "text-gray-300 hover:bg-white/5 hover:text-white"
+                }`}
               >
                 {link.label}
               </Link>
@@ -154,10 +153,10 @@ export default function Navbar({ lang }: NavbarProps) {
             <div className="pt-2">
               <Link
                 href={`/${lang}/donate`}
-                className="block rounded-full bg-brand px-4 py-2 text-center text-sm font-semibold text-white"
                 onClick={() => setMobileOpen(false)}
+                className="block rounded-full bg-brand px-4 py-2.5 text-center text-sm font-semibold text-white"
               >
-                {dict.nav.donate}
+                Donate Now
               </Link>
             </div>
           </div>

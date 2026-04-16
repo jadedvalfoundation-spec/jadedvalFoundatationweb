@@ -77,7 +77,7 @@ export default function RichTextEditor({
   // Sync external value changes (e.g. form reset)
   const syncContent = useCallback(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value, false);
+      editor.commands.setContent(value, { emitUpdate: false });
     }
   }, [editor, value]);
 

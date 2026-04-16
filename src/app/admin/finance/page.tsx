@@ -86,7 +86,7 @@ export default function FinancePage() {
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="name" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} />
-            <Tooltip formatter={(v: number) => `$${v.toLocaleString()}`} />
+            <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
             <Legend />
             <Area type="monotone" dataKey="Donations" stroke="#00ccbb" fill="url(#colorDonations)" strokeWidth={2} />
             <Area type="monotone" dataKey="Expenses" stroke="#ef4444" fill="url(#colorExpenses)" strokeWidth={2} />
@@ -101,10 +101,10 @@ export default function FinancePage() {
           {pieData.length > 0 ? (
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                <Pie data={pieData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
                   {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
-                <Tooltip formatter={(v: number) => `$${v.toLocaleString()}`} />
+                <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
               </PieChart>
             </ResponsiveContainer>
           ) : (
@@ -121,7 +121,7 @@ export default function FinancePage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} />
                 <YAxis type="category" dataKey="name" width={100} tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(v: number) => `$${v.toLocaleString()}`} />
+                <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
                 <Bar dataKey="total" fill="#00ccbb" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
