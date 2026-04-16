@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "programs": "Programas",
+    "donate": "Donar",
+    "contact": "Contacto",
+    "signIn": "Iniciar sesión",
+    "getStarted": "Comenzar",
+    "dashboard": "Panel",
+    "profile": "Perfil",
+    "adminPanel": "Panel de administración",
+    "signOut": "Cerrar sesión"
+  },
+  "hero": {
+    "title": "Construyendo Comunidades Más Fuertes Juntos",
+    "subtitle": "La Fundación Jadedval se dedica a empoderar vidas a través de la educación, la salud y el desarrollo comunitario sostenible.",
+    "donateNow": "Donar Ahora",
+    "ourPrograms": "Nuestros Programas"
+  },
+  "stats": {
+    "livesImpacted": "Vidas Impactadas",
+    "programs": "Programas",
+    "communities": "Comunidades",
+    "volunteers": "Voluntarios"
+  },
+  "programs": {
+    "heading": "Nuestros Programas Clave",
+    "subheading": "Ejecutamos programas de impacto que crean un cambio duradero en múltiples sectores.",
+    "education": {
+      "title": "Educación",
+      "description": "Proporcionando becas, útiles escolares y tutoría a estudiantes desfavorecidos."
+    },
+    "healthcare": {
+      "title": "Salud",
+      "description": "Alcance médico gratuito, exámenes de salud y programas de bienestar para comunidades."
+    },
+    "skills": {
+      "title": "Formación de Habilidades",
+      "description": "Programas de formación vocacional y emprendimiento que fomentan la independencia económica."
+    },
+    "community": {
+      "title": "Desarrollo Comunitario",
+      "description": "Proyectos de infraestructura que mejoran los estándares de vida y el bienestar comunitario."
+    },
+    "youth": {
+      "title": "Empoderamiento Juvenil",
+      "description": "Capacitación en liderazgo, deportes y programas culturales para jóvenes."
+    },
+    "environment": {
+      "title": "Medio Ambiente",
+      "description": "Plantación de árboles, campañas de limpieza e iniciativas de educación sobre sostenibilidad."
+    }
+  },
+  "cta": {
+    "heading": "¿Listo para Hacer una Diferencia?",
+    "subheading": "Únete a nuestra misión de crear un mundo mejor. Cada contribución cuenta.",
+    "joinUs": "Únete",
+    "contactUs": "Contáctanos"
+  },
+  "footer": {
+    "tagline": "Empoderando comunidades a través de la educación, la salud y el desarrollo sostenible.",
+    "quickLinks": "Enlaces Rápidos",
+    "programsTitle": "Programas",
+    "contact": "Contacto",
+    "allRightsReserved": "Todos los derechos reservados."
+  },
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "fullName": "Nombre completo",
+    "confirmPassword": "Confirmar contraseña"
+  },
+  "language": {
+    "selector": "Idioma"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "programs": "Programmes",
+    "donate": "Faire un don",
+    "contact": "Contact",
+    "signIn": "Se connecter",
+    "getStarted": "Commencer",
+    "dashboard": "Tableau de bord",
+    "profile": "Profil",
+    "adminPanel": "Panneau d'administration",
+    "signOut": "Se déconnecter"
+  },
+  "hero": {
+    "title": "Construire des Communautés Plus Fortes Ensemble",
+    "subtitle": "La Fondation Jadedval se consacre à autonomiser les vies grâce à l'éducation, aux soins de santé et au développement communautaire durable.",
+    "donateNow": "Faire un don",
+    "ourPrograms": "Nos Programmes"
+  },
+  "stats": {
+    "livesImpacted": "Vies Impactées",
+    "programs": "Programmes",
+    "communities": "Communautés",
+    "volunteers": "Bénévoles"
+  },
+  "programs": {
+    "heading": "Nos Programmes Clés",
+    "subheading": "Nous menons des programmes percutants qui créent un changement durable dans de multiples secteurs.",
+    "education": {
+      "title": "Éducation",
+      "description": "Fourniture de bourses, de fournitures scolaires et de mentorat aux étudiants défavorisés."
+    },
+    "healthcare": {
+      "title": "Santé",
+      "description": "Sensibilisation médicale gratuite, dépistages de santé et programmes de bien-être pour les communautés."
+    },
+    "skills": {
+      "title": "Formation Professionnelle",
+      "description": "Programmes de formation professionnelle et d'entrepreneuriat favorisant l'indépendance économique."
+    },
+    "community": {
+      "title": "Développement Communautaire",
+      "description": "Projets d'infrastructure qui améliorent les conditions de vie et le bien-être des communautés."
+    },
+    "youth": {
+      "title": "Autonomisation des Jeunes",
+      "description": "Formation en leadership, sports et programmes culturels pour les jeunes."
+    },
+    "environment": {
+      "title": "Environnement",
+      "description": "Plantation d'arbres, campagnes de nettoyage et initiatives d'éducation à la durabilité."
+    }
+  },
+  "cta": {
+    "heading": "Prêt à Faire une Différence?",
+    "subheading": "Rejoignez-nous dans notre mission de créer un monde meilleur. Chaque contribution compte.",
+    "joinUs": "Nous Rejoindre",
+    "contactUs": "Nous Contacter"
+  },
+  "footer": {
+    "tagline": "Autonomiser les communautés grâce à l'éducation, aux soins de santé et au développement durable.",
+    "quickLinks": "Liens Rapides",
+    "programsTitle": "Programmes",
+    "contact": "Contact",
+    "allRightsReserved": "Tous droits réservés."
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Pas de compte?",
+    "hasAccount": "Vous avez déjà un compte?",
+    "fullName": "Nom complet",
+    "confirmPassword": "Confirmer le mot de passe"
+  },
+  "language": {
+    "selector": "Langue"
+  }
+}

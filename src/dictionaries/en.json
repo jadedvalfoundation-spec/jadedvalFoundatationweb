@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "programs": "Programs",
+    "donate": "Donate",
+    "contact": "Contact",
+    "signIn": "Sign In",
+    "getStarted": "Get Started",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "adminPanel": "Admin Panel",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "title": "Building Stronger Communities Together",
+    "subtitle": "The Jadedval Foundation is dedicated to empowering lives through education, healthcare, and sustainable community development.",
+    "donateNow": "Donate Now",
+    "ourPrograms": "Our Programs"
+  },
+  "stats": {
+    "livesImpacted": "Lives Impacted",
+    "programs": "Programs",
+    "communities": "Communities",
+    "volunteers": "Volunteers"
+  },
+  "programs": {
+    "heading": "Our Key Programs",
+    "subheading": "We run impactful programs that create lasting change across multiple sectors.",
+    "education": {
+      "title": "Education",
+      "description": "Providing scholarships, school supplies, and mentorship to underprivileged students."
+    },
+    "healthcare": {
+      "title": "Healthcare",
+      "description": "Free medical outreach, health screenings, and wellness programs for communities."
+    },
+    "skills": {
+      "title": "Skills Training",
+      "description": "Vocational training and entrepreneurship programs that empower economic independence."
+    },
+    "community": {
+      "title": "Community Development",
+      "description": "Infrastructure projects that improve living standards and community well-being."
+    },
+    "youth": {
+      "title": "Youth Empowerment",
+      "description": "Leadership training, sports, and cultural programs for young people."
+    },
+    "environment": {
+      "title": "Environment",
+      "description": "Tree planting, clean-up campaigns, and sustainability education initiatives."
+    }
+  },
+  "cta": {
+    "heading": "Ready to Make a Difference?",
+    "subheading": "Join us in our mission to create a better world. Every contribution counts.",
+    "joinUs": "Join Us",
+    "contactUs": "Contact Us"
+  },
+  "footer": {
+    "tagline": "Empowering communities through education, healthcare, and sustainable development.",
+    "quickLinks": "Quick Links",
+    "programsTitle": "Programs",
+    "contact": "Contact",
+    "allRightsReserved": "All rights reserved."
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "fullName": "Full Name",
+    "confirmPassword": "Confirm Password"
+  },
+  "language": {
+    "selector": "Language"
+  }
+}

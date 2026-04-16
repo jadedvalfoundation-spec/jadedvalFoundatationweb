@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "programs": "项目",
+    "donate": "捐款",
+    "contact": "联系我们",
+    "signIn": "登录",
+    "getStarted": "立即开始",
+    "dashboard": "控制台",
+    "profile": "个人资料",
+    "adminPanel": "管理面板",
+    "signOut": "退出登录"
+  },
+  "hero": {
+    "title": "携手共建更强大的社区",
+    "subtitle": "贾德瓦尔基金会致力于通过教育、医疗保健和可持续社区发展赋能生活。",
+    "donateNow": "立即捐款",
+    "ourPrograms": "我们的项目"
+  },
+  "stats": {
+    "livesImpacted": "受益人数",
+    "programs": "项目数",
+    "communities": "社区数",
+    "volunteers": "志愿者"
+  },
+  "programs": {
+    "heading": "我们的核心项目",
+    "subheading": "我们开展有影响力的项目，在多个领域创造持久变革。",
+    "education": {
+      "title": "教育",
+      "description": "为贫困学生提供奖学金、学习用品和辅导。"
+    },
+    "healthcare": {
+      "title": "医疗保健",
+      "description": "为社区提供免费医疗外展服务、健康筛查和健康项目。"
+    },
+    "skills": {
+      "title": "技能培训",
+      "description": "职业培训和创业项目，促进经济独立。"
+    },
+    "community": {
+      "title": "社区发展",
+      "description": "改善居住条件和社区福祉的基础设施项目。"
+    },
+    "youth": {
+      "title": "青年赋能",
+      "description": "为年轻人提供领导力培训、体育和文化项目。"
+    },
+    "environment": {
+      "title": "环境保护",
+      "description": "植树活动、清洁行动和可持续发展教育倡议。"
+    }
+  },
+  "cta": {
+    "heading": "准备好创造改变了吗？",
+    "subheading": "加入我们创建更美好世界的使命。每一份贡献都至关重要。",
+    "joinUs": "加入我们",
+    "contactUs": "联系我们"
+  },
+  "footer": {
+    "tagline": "通过教育、医疗保健和可持续发展赋能社区。",
+    "quickLinks": "快速链接",
+    "programsTitle": "项目",
+    "contact": "联系方式",
+    "allRightsReserved": "版权所有。"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signUp": "注册",
+    "email": "电子邮件",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "没有账户？",
+    "hasAccount": "已有账户？",
+    "fullName": "全名",
+    "confirmPassword": "确认密码"
+  },
+  "language": {
+    "selector": "语言"
+  }
+}
