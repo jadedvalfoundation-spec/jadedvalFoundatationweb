@@ -10,7 +10,10 @@
     "dashboard": "Panel",
     "profile": "Perfil",
     "adminPanel": "Panel de administración",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "getInvolved": "Participar",
+    "impact": "Impacto",
+    "news": "Noticias"
   },
   "hero": {
     "title": "Construyendo Comunidades Más Fuertes Juntos",

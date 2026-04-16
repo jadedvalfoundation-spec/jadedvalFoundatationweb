@@ -1,0 +1,135 @@
+import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { hasLocale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
+import connectDB from "@/lib/mongodb";
+import WebsiteInfo from "@/models/WebsiteInfo";
+import Project from "@/models/Project";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
+import DonateForm from "@/components/shared/DonateForm";
+
+export const metadata = { title: "Donate — Jade D'Val Foundation" };
+
+async function getData(projectId?: string) {
+  try {
+    await connectDB();
+    const [info, project] = await Promise.all([
+      WebsiteInfo.findOne()
+        .select("bankName bankAccountName bankAccountNumber bankSortCode bankSwiftCode bankTransferNote impactMade")
+        .lean() as Promise<{
+          bankName?: string; bankAccountName?: string; bankAccountNumber?: string;
+          bankSortCode?: string; bankSwiftCode?: string; bankTransferNote?: string;
+          impactMade?: number;
+        } | null>,
+      projectId
+        ? Project.findById(projectId).select("name program status").lean()
+        : null,
+    ]);
+    return { info: info ?? {}, project };
+  } catch {
+    return { info: {}, project: null };
+  }
+}
+
+export default async function DonatePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<{ project?: string; name?: string }>;
+}) {
+  const { lang } = await params;
+  const sp = await searchParams;
+  if (!hasLocale(lang)) notFound();
+
+  const { info, project } = await getData(sp.project);
+
+  const cookieStore = await cookies();
+  const userCurrency = cookieStore.get("user_currency")?.value ?? "USD";
+
+  const projectName = (project as { name?: string } | null)?.name ?? sp.name;
+  const projectId = sp.project;
+
+  const flwPublicKey = process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY ?? "";
+
+  const impactMade = (info as { impactMade?: number }).impactMade ?? 0;
+
+  return (
+    <div className="min-h-screen bg-[#0c1620]">
+      <Navbar lang={lang as Locale} />
+
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-14 lg:grid-cols-2 lg:items-start">
+
+          {/* Left — impact copy */}
+          <div className="lg:sticky lg:top-24">
+            <span className="text-xs font-bold uppercase tracking-widest text-brand">Make a Difference</span>
+            <h1 className="mt-3 font-heading text-4xl font-bold leading-tight text-white sm:text-5xl">
+              Every Dollar{" "}
+              <em className="not-italic text-brand">Transforms</em>{" "}
+              a Life
+            </h1>
+            <p className="mt-5 text-lg leading-relaxed text-gray-400">
+              Your generosity directly powers our digital literacy programs, family stabilisation efforts, and community development projects.
+            </p>
+
+            {projectName && (
+              <div className="mt-6 rounded-2xl p-5"
+                style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.3)" }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-brand">Donating to</p>
+                <p className="mt-1 font-heading text-lg font-bold text-white">{projectName}</p>
+              </div>
+            )}
+
+            {/* Impact stats */}
+            <div className="mt-8 grid grid-cols-3 gap-4">
+              {[
+                { value: impactMade > 0 ? (impactMade >= 1000 ? Math.round(impactMade / 1000) + "k+" : impactMade + "+") : "120k+", label: "Lives Impacted" },
+                { value: "100%", label: "To Programs" },
+                { value: "48h", label: "Avg. Response" },
+              ].map((s) => (
+                <div key={s.label} className="rounded-xl p-4 text-center"
+                  style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <p className="font-heading text-2xl font-bold text-brand">{s.value}</p>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-gray-500">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust signals */}
+            <div className="mt-8 space-y-3">
+              {[
+                { icon: "🔒", text: "Secure payment powered by Flutterwave" },
+                { icon: "📧", text: "Instant confirmation email sent to you" },
+                { icon: "📊", text: "Full transparency — track your impact in our reports" },
+              ].map((item) => (
+                <div key={item.text} className="flex items-center gap-3 text-sm text-gray-400">
+                  <span className="text-base">{item.icon}</span>
+                  <span>{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — form */}
+          <div className="rounded-2xl p-6 sm:p-8"
+            style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <h2 className="mb-6 font-heading text-xl font-bold text-white">
+              {projectName ? `Support "${projectName}"` : "Make a Donation"}
+            </h2>
+            <DonateForm
+              projectId={projectId}
+              projectName={projectName}
+              flwPublicKey={flwPublicKey || undefined}
+              bankDetails={info as Parameters<typeof DonateForm>[0]["bankDetails"]}
+              userCurrency={userCurrency}
+            />
+          </div>
+        </div>
+      </div>
+
+      <Footer lang={lang as Locale} />
+    </div>
+  );
+}

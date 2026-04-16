@@ -18,12 +18,16 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Jadedval Foundation",
-    template: "%s | Jadedval Foundation",
+    default: "Jade D'Val Foundation",
+    template: "%s | Jade D'Val Foundation",
   },
   description:
     "Empowering communities through education, healthcare, and sustainable development.",
   keywords: ["foundation", "charity", "community", "education", "healthcare"],
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

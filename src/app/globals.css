@@ -82,3 +82,7 @@ h6 {
 .rich-content a { color: var(--brand); text-decoration: underline; }
 .rich-content *:first-child { margin-top: 0; }
 .rich-content *:last-child { margin-bottom: 0; }
+.rich-content [style*="text-align: center"] { text-align: center; }
+.rich-content [style*="text-align: right"] { text-align: right; }
+.rich-content [style*="text-align: left"] { text-align: left; }
+.rich-content h1, .rich-content h2, .rich-content h3 { color: inherit; }

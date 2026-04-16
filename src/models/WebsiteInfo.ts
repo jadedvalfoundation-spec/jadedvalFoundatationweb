@@ -17,6 +17,14 @@ export interface IJourneyItem {
   description: string;
 }
 
+export interface IImpactAnalytic {
+  sector: string;
+  metric: string;
+  value: string;
+  goal: string;
+  goalYear: string;
+}
+
 export interface IWebsiteInfo extends Document {
   contactPhone: string;
   contactEmail: string;
@@ -27,6 +35,8 @@ export interface IWebsiteInfo extends Document {
   impactMade: number;
   countriesReached: number;
   communitiesImpacted: number;
+  allocatedCapitalUSD: number;
+  impactAnalytics: IImpactAnalytic[];
   facebook?: string;
   twitter?: string;
   instagram?: string;
@@ -36,10 +46,27 @@ export interface IWebsiteInfo extends Document {
   journey: IJourneyItem[];
   heroImage: string;
   storyImage: string;
+  bankName: string;
+  bankAccountName: string;
+  bankAccountNumber: string;
+  bankSortCode: string;
+  bankSwiftCode: string;
+  bankTransferNote: string;
   updatedBy?: mongoose.Types.ObjectId;
   updatedAt: Date;
   createdAt: Date;
 }
+
+const ImpactAnalyticSchema = new Schema<IImpactAnalytic>(
+  {
+    sector: { type: String, required: true },
+    metric: { type: String, required: true },
+    value: { type: String, required: true },
+    goal: { type: String, required: true },
+    goalYear: { type: String, default: "" },
+  },
+  { _id: false }
+);
 
 const FAQSchema = new Schema<IFAQ>(
   {
@@ -78,6 +105,8 @@ const WebsiteInfoSchema = new Schema<IWebsiteInfo>(
     impactMade: { type: Number, default: 0 },
     countriesReached: { type: Number, default: 0 },
     communitiesImpacted: { type: Number, default: 0 },
+    allocatedCapitalUSD: { type: Number, default: 0 },
+    impactAnalytics: { type: [ImpactAnalyticSchema], default: [] },
     facebook: { type: String, default: null },
     twitter: { type: String, default: null },
     instagram: { type: String, default: null },
@@ -87,6 +116,12 @@ const WebsiteInfoSchema = new Schema<IWebsiteInfo>(
     journey: { type: [JourneyItemSchema], default: [] },
     heroImage: { type: String, default: "" },
     storyImage: { type: String, default: "" },
+    bankName: { type: String, default: "" },
+    bankAccountName: { type: String, default: "" },
+    bankAccountNumber: { type: String, default: "" },
+    bankSortCode: { type: String, default: "" },
+    bankSwiftCode: { type: String, default: "" },
+    bankTransferNote: { type: String, default: "" },
     updatedBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
   },
   { timestamps: true }

@@ -10,7 +10,10 @@
     "dashboard": "Tableau de bord",
     "profile": "Profil",
     "adminPanel": "Panneau d'administration",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "getInvolved": "S'impliquer",
+    "impact": "Impact",
+    "news": "Actualités"
   },
   "hero": {
     "title": "Construire des Communautés Plus Fortes Ensemble",

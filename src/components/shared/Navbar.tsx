@@ -31,13 +31,13 @@ export default function Navbar({ lang }: NavbarProps) {
   }
 
   const navLinks = [
-    { label: "Home", href: `/${lang}` },
-    { label: "About Us", href: `/${lang}/about` },
-    { label: "Programs", href: `/${lang}/programs` },
-    { label: "Get Involved", href: `/${lang}/get-involved` },
-    { label: "Impact", href: `/${lang}/impact` },
-    { label: "News", href: `/${lang}/news` },
-    { label: "Contact", href: `/${lang}/contact` },
+    { label: dict.nav.home, href: `/${lang}` },
+    { label: dict.nav.about, href: `/${lang}/about` },
+    { label: dict.nav.programs, href: `/${lang}/programs` },
+    { label: dict.nav.getInvolved, href: `/${lang}/get-involved` },
+    { label: dict.nav.impact, href: `/${lang}/impact` },
+    { label: dict.nav.news, href: `/${lang}/news` },
+    { label: dict.nav.contact, href: `/${lang}/contact` },
   ];
 
   const flagEmoji: Record<string, string> = {
@@ -111,7 +111,7 @@ export default function Navbar({ lang }: NavbarProps) {
               href={`/${lang}/donate`}
               className="hidden rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark sm:block"
             >
-              Donate Now
+              {dict.nav.donate}
             </Link>
 
             {/* Hamburger */}
@@ -156,7 +156,7 @@ export default function Navbar({ lang }: NavbarProps) {
                 onClick={() => setMobileOpen(false)}
                 className="block rounded-full bg-brand px-4 py-2.5 text-center text-sm font-semibold text-white"
               >
-                Donate Now
+                {dict.nav.donate}
               </Link>
             </div>
           </div>

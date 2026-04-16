@@ -10,7 +10,10 @@
     "dashboard": "Dashboard",
     "profile": "Profile",
     "adminPanel": "Admin Panel",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "getInvolved": "Get Involved",
+    "impact": "Impact",
+    "news": "News"
   },
   "hero": {
     "title": "Building Stronger Communities Together",

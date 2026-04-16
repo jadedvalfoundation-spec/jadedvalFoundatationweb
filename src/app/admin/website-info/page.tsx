@@ -11,6 +11,14 @@ interface FAQ { question: string; answer: string }
 interface Pillar { icon: string; title: string; description: string }
 interface JourneyItem { date: string; title: string; description: string }
 
+interface ImpactAnalytic {
+  sector: string;
+  metric: string;
+  value: string;
+  goal: string;
+  goalYear: string;
+}
+
 interface Info {
   contactPhone: string;
   contactEmail: string;
@@ -21,6 +29,8 @@ interface Info {
   impactMade: number;
   countriesReached: number;
   communitiesImpacted: number;
+  allocatedCapitalUSD: number;
+  impactAnalytics: ImpactAnalytic[];
   facebook: string;
   twitter: string;
   instagram: string;
@@ -30,6 +40,12 @@ interface Info {
   journey: JourneyItem[];
   heroImage: string;
   storyImage: string;
+  bankName: string;
+  bankAccountName: string;
+  bankAccountNumber: string;
+  bankSortCode: string;
+  bankSwiftCode: string;
+  bankTransferNote: string;
 }
 
 const BLANK: Info = {
@@ -42,6 +58,8 @@ const BLANK: Info = {
   impactMade: 0,
   countriesReached: 0,
   communitiesImpacted: 0,
+  allocatedCapitalUSD: 0,
+  impactAnalytics: [],
   facebook: "",
   twitter: "",
   instagram: "",
@@ -51,9 +69,15 @@ const BLANK: Info = {
   journey: [],
   heroImage: "",
   storyImage: "",
+  bankName: "",
+  bankAccountName: "",
+  bankAccountNumber: "",
+  bankSortCode: "",
+  bankSwiftCode: "",
+  bankTransferNote: "",
 };
 
-const SECTIONS = ["Contact", "About", "Stats", "Social Media", "FAQ", "Pillars", "Journey", "Media"] as const;
+const SECTIONS = ["Contact", "About", "Stats", "Social Media", "FAQ", "Pillars", "Journey", "Media", "Bank Details", "Impact Analytics"] as const;
 type Section = typeof SECTIONS[number];
 
 export default function WebsiteInfoPage() {
@@ -119,6 +143,17 @@ export default function WebsiteInfoPage() {
   }
   function updateJourneyItem(idx: number, field: keyof JourneyItem, val: string) {
     setInfo(i => ({ ...i, journey: i.journey.map((item, j) => j === idx ? { ...item, [field]: val } : item) }));
+  }
+
+  // Impact Analytics helpers
+  function addAnalytic() {
+    setInfo(i => ({ ...i, impactAnalytics: [...i.impactAnalytics, { sector: "", metric: "", value: "", goal: "", goalYear: "" }] }));
+  }
+  function removeAnalytic(idx: number) {
+    setInfo(i => ({ ...i, impactAnalytics: i.impactAnalytics.filter((_, j) => j !== idx) }));
+  }
+  function updateAnalytic(idx: number, field: keyof ImpactAnalytic, val: string) {
+    setInfo(i => ({ ...i, impactAnalytics: i.impactAnalytics.map((a, j) => j === idx ? { ...a, [field]: val } : a) }));
   }
 
   if (loading) return <div className="flex h-40 items-center justify-center text-gray-400">Loading…</div>;
@@ -225,6 +260,13 @@ export default function WebsiteInfoPage() {
                 type="number"
                 value={info.communitiesImpacted}
                 onChange={e => setInfo({ ...info, communitiesImpacted: Number(e.target.value) })}
+              />
+              <Input
+                label="Allocated Capital (USD)"
+                type="number"
+                value={info.allocatedCapitalUSD}
+                onChange={e => setInfo({ ...info, allocatedCapitalUSD: Number(e.target.value) })}
+                placeholder="e.g. 2400000"
               />
             </div>
           )}
@@ -425,6 +467,98 @@ export default function WebsiteInfoPage() {
                   onChange={(url) => setInfo(prev => ({ ...prev, storyImage: url }))}
                   onRemove={() => setInfo(prev => ({ ...prev, storyImage: "" }))}
                 />
+              </div>
+            </div>
+          )}
+
+          {activeSection === "Bank Details" && (
+            <div className="space-y-4">
+              <h2 className="text-base font-semibold text-gray-800">Bank Transfer Details</h2>
+              <p className="text-sm text-gray-500">
+                These details are shown to donors who choose to donate via direct bank transfer.
+              </p>
+              <Input label="Bank Name" value={info.bankName}
+                onChange={e => setInfo(prev => ({ ...prev, bankName: e.target.value }))}
+                placeholder="e.g. First National Bank" />
+              <Input label="Account Name" value={info.bankAccountName}
+                onChange={e => setInfo(prev => ({ ...prev, bankAccountName: e.target.value }))}
+                placeholder="Jade D'Val Foundation NGO" />
+              <Input label="Account Number" value={info.bankAccountNumber}
+                onChange={e => setInfo(prev => ({ ...prev, bankAccountNumber: e.target.value }))}
+                placeholder="0123456789" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Input label="Sort Code / Routing Number" value={info.bankSortCode}
+                  onChange={e => setInfo(prev => ({ ...prev, bankSortCode: e.target.value }))}
+                  placeholder="00-00-00" />
+                <Input label="SWIFT / BIC Code" value={info.bankSwiftCode}
+                  onChange={e => setInfo(prev => ({ ...prev, bankSwiftCode: e.target.value }))}
+                  placeholder="FNBKUS33" />
+              </div>
+              <Textarea label="Additional Transfer Instructions" rows={3} value={info.bankTransferNote}
+                onChange={e => setInfo(prev => ({ ...prev, bankTransferNote: e.target.value }))}
+                placeholder="e.g. Please use your full name as reference. Allow 3-5 business days for processing." />
+            </div>
+          )}
+
+          {activeSection === "Impact Analytics" && (
+            <div>
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h2 className="text-base font-semibold text-gray-800">Impact Analytics</h2>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Progress bars shown on the public Impact page under &quot;Precision Impact Analytics&quot;.
+                  </p>
+                </div>
+                <Button variant="outline" size="sm" onClick={addAnalytic}>+ Add Metric</Button>
+              </div>
+              <div className="space-y-4">
+                {info.impactAnalytics.map((item, i) => (
+                  <div key={i} className="rounded-lg border border-gray-200 p-4">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="text-xs font-medium text-gray-400">Metric #{i + 1}</span>
+                      <button onClick={() => removeAnalytic(i)} className="text-xs text-red-400 hover:text-red-600">
+                        Remove
+                      </button>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <Input
+                        label="Sector"
+                        value={item.sector}
+                        onChange={e => updateAnalytic(i, "sector", e.target.value)}
+                        placeholder="e.g. Education"
+                      />
+                      <Input
+                        label="Metric Name"
+                        value={item.metric}
+                        onChange={e => updateAnalytic(i, "metric", e.target.value)}
+                        placeholder="e.g. Students Enrolled"
+                      />
+                      <Input
+                        label="Current Value"
+                        value={item.value}
+                        onChange={e => updateAnalytic(i, "value", e.target.value)}
+                        placeholder="e.g. 850"
+                      />
+                      <Input
+                        label="Goal / Target"
+                        value={item.goal}
+                        onChange={e => updateAnalytic(i, "goal", e.target.value)}
+                        placeholder="e.g. 1000"
+                      />
+                      <Input
+                        label="Goal Year (optional)"
+                        value={item.goalYear}
+                        onChange={e => updateAnalytic(i, "goalYear", e.target.value)}
+                        placeholder="e.g. 2026"
+                      />
+                    </div>
+                  </div>
+                ))}
+                {info.impactAnalytics.length === 0 && (
+                  <p className="py-6 text-center text-sm text-gray-400">
+                    No analytics yet. Click &quot;+ Add Metric&quot; to create one.
+                  </p>
+                )}
               </div>
             </div>
           )}

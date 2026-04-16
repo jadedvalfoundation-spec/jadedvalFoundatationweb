@@ -10,7 +10,10 @@
     "dashboard": "控制台",
     "profile": "个人资料",
     "adminPanel": "管理面板",
-    "signOut": "退出登录"
+    "signOut": "退出登录",
+    "getInvolved": "参与其中",
+    "impact": "影响",
+    "news": "新闻"
   },
   "hero": {
     "title": "携手共建更强大的社区",

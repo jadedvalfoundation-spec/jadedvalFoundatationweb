@@ -5,7 +5,7 @@ import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
-import Blog from "@/models/Blog";
+import Project from "@/models/Project";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import NewsletterForm from "@/components/shared/NewsletterForm";
@@ -13,19 +13,23 @@ import NewsletterForm from "@/components/shared/NewsletterForm";
 async function getData() {
   try {
     await connectDB();
-    const [info, posts] = await Promise.all([
+    const [info, projects] = await Promise.all([
       WebsiteInfo.findOne().lean() as Promise<{
         impactMade?: number; countriesReached?: number; communitiesImpacted?: number; heroImage?: string;
       } | null>,
-      Blog.find({ isPublished: true })
-        .sort({ publishedAt: -1 })
-        .limit(3)
-        .select("title description media createdAt")
-        .lean(),
+      // One most-recent project per program, up to 5
+      Project.aggregate([
+        { $match: { isActive: true } },
+        { $sort: { createdAt: -1 } },
+        { $group: { _id: "$program", doc: { $first: "$$ROOT" } } },
+        { $replaceRoot: { newRoot: "$doc" } },
+        { $lookup: { from: "programs", localField: "program", foreignField: "_id", as: "programInfo" } },
+        { $limit: 5 },
+      ]),
     ]);
-    return { info: info ?? {}, posts };
+    return { info: info ?? {}, projects };
   } catch {
-    return { info: {}, posts: [] };
+    return { info: {}, projects: [] };
   }
 }
 
@@ -33,7 +37,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const { info, posts } = await getData();
+  const { info, projects } = await getData();
 
   const heroImage = (info as { heroImage?: string }).heroImage ?? "";
   const impactMade = (info as { impactMade?: number }).impactMade ?? 0;
@@ -146,41 +150,55 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             </div>
           </div>
 
-          {/* Impact story cards */}
+          {/* View all link */}
+          <div className="mb-8 flex justify-end">
+            <Link href={`/${lang}/programs`} className="text-sm font-semibold text-brand hover:underline">
+              View all projects →
+            </Link>
+          </div>
+
+          {/* Project story cards */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.length > 0 ? posts.map((post) => {
-              const p = post as {
-                _id: unknown; title: string; description: string;
-                media?: { url: string; type: string }[]; createdAt: Date;
+            {projects.length > 0 ? projects.map((proj) => {
+              const pr = proj as {
+                _id: unknown; name: string; description: string;
+                image?: string; status: string;
+                programInfo?: { name: string }[];
               };
-              const img = p.media?.find(m => m.type === "image")?.url ?? "";
+              const programName = pr.programInfo?.[0]?.name ?? "Foundation";
               return (
-                <article key={String(p._id)}
-                  className="group overflow-hidden rounded-2xl transition-transform hover:-translate-y-1"
+                <Link key={String(pr._id)}
+                  href={`/${lang}/projects/${String(pr._id)}`}
+                  className="group block overflow-hidden rounded-2xl transition-transform hover:-translate-y-1"
                   style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <div className="relative h-48 overflow-hidden bg-[#132535]">
-                    {img ? (
-                      <Image src={img} alt={p.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                    {pr.image ? (
+                      <Image src={pr.image} alt={pr.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     ) : (
-                      <div className="flex h-full items-center justify-center">
-                        <span className="text-4xl opacity-30">📰</span>
+                      <div className="flex h-full items-center justify-center bg-gradient-to-br from-[#132535] to-[#1a3a50]">
+                        <span className="text-4xl opacity-20">🌍</span>
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
                   <div className="p-5">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-brand">Impact Story</span>
-                    <h3 className="mt-2 font-heading text-base font-bold text-white line-clamp-2">{p.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-400 line-clamp-3">{p.description}</p>
+                    <span className="text-xs font-semibold uppercase tracking-widest text-brand">{programName}</span>
+                    <h3 className="mt-2 font-heading text-base font-bold text-white line-clamp-2 group-hover:text-brand transition-colors">{pr.name}</h3>
+                    <div className="mt-2 text-sm leading-relaxed text-gray-400 line-clamp-3 rich-content-plain">
+                      {pr.description.replace(/<[^>]+>/g, " ").slice(0, 160)}…
+                    </div>
+                    <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand">
+                      Read More <span className="transition-transform group-hover:translate-x-1">→</span>
+                    </span>
                   </div>
-                </article>
+                </Link>
               );
             }) : (
-              /* Placeholder cards when no blog posts yet */
+              /* Placeholder cards */
               [
-                { tag: "Child Empowerment #32", title: "Asha's Journey to Leadership", desc: "How digital literacy programs helped a 12-year-old transform her village's water management." },
-                { tag: "Direct Support #841", title: "Stabilizing the Moreno Family", desc: "Comprehensive family support that turned a housing crisis into a community small business." },
-                { tag: "Community Development #68", title: "The Hub for Future Growth", desc: "Transforming abandoned spaces into vibrant digital-human community centers." },
+                { tag: "Child Empowerment", title: "Asha's Journey to Leadership", desc: "How digital literacy programs helped a 12-year-old transform her village's water management." },
+                { tag: "Direct Support", title: "Stabilizing the Moreno Family", desc: "Comprehensive family support that turned a housing crisis into a community small business." },
+                { tag: "Community Development", title: "The Hub for Future Growth", desc: "Transforming abandoned spaces into vibrant digital-human community centers." },
               ].map((card) => (
                 <article key={card.title}
                   className="overflow-hidden rounded-2xl"

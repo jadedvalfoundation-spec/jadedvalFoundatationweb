@@ -22,6 +22,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin/finance",      label: "Finance",        icon: "💰", roles: ["super_admin","admin","finance"] },
   { href: "/admin/requisitions", label: "Requisitions",   icon: "📝", roles: ["super_admin","admin","finance"] },
   { href: "/admin/blog",         label: "Blog",           icon: "📰", roles: ["super_admin","admin","support"] },
+  { href: "/admin/impact",       label: "Impact & Stories", icon: "🌟", roles: ["super_admin","admin","support"] },
   { href: "/admin/website-info", label: "Website Info",   icon: "🌐", roles: ["super_admin","admin","support"] },
   { href: "/admin/requests",     label: "Requests",       icon: "📨", roles: ["super_admin","admin"] },
   { href: "/admin/users",        label: "All Users",      icon: "👥", roles: ["super_admin","admin"] },
