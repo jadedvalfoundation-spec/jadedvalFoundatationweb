@@ -7,7 +7,6 @@ import {
   getCurrencyForCountry,
 } from "@/lib/i18n";
 
-const PROTECTED_PATHS = ["/dashboard", "/profile"];
 const ADMIN_PATHS = ["/admin"];
 
 /** Returns true if the pathname already starts with a supported locale segment. */
@@ -28,6 +27,31 @@ export default async function proxy(request: NextRequest) {
     pathname.includes(".")
   ) {
     return NextResponse.next();
+  }
+
+  // ── Admin routes: completely separate from the website ───────────────────
+  const isAdminPath = ADMIN_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+  if (isAdminPath) {
+    // Admin login page is always accessible — pass through with pathname header
+    if (pathname === "/admin/login") {
+      return NextResponse.next({
+        request: { headers: new Headers({ ...Object.fromEntries(request.headers), "x-pathname": pathname }) },
+      });
+    }
+
+    // Check session manually and redirect to /admin/login if not authenticated
+    const session = await auth();
+    const { isAdminRole } = await import("@/models/User");
+    if (!session || !isAdminRole(session.user?.role ?? "")) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin/login";
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next({
+      request: { headers: new Headers({ ...Object.fromEntries(request.headers), "x-pathname": pathname }) },
+    });
   }
 
   // ── Locale redirect ────────────────────────────────────────────────────────
@@ -54,25 +78,6 @@ export default async function proxy(request: NextRequest) {
     });
 
     return response;
-  }
-
-  // ── Auth guard for protected routes ────────────────────────────────────────
-  // Strip the leading /[lang] segment to get the bare path for matching
-  const bare = pathname.replace(/^\/[a-z]{2}/, "");
-
-  const needsAuth = PROTECTED_PATHS.some(
-    (p) => bare === p || bare.startsWith(`${p}/`),
-  );
-  const needsAdmin = ADMIN_PATHS.some(
-    (p) => bare === p || bare.startsWith(`${p}/`),
-  );
-
-  // Admin routes live at /admin (no lang prefix) — handled by auth middleware directly
-  if (needsAdmin || needsAuth) {
-    // Delegate to next-auth
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const authResult = await (auth as any)(request);
-    if (authResult) return authResult;
   }
 
   return NextResponse.next();

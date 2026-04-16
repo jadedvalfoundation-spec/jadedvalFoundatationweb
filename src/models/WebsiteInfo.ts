@@ -5,6 +5,18 @@ export interface IFAQ {
   answer: string;
 }
 
+export interface IPillar {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface IJourneyItem {
+  date: string;
+  title: string;
+  description: string;
+}
+
 export interface IWebsiteInfo extends Document {
   contactPhone: string;
   contactEmail: string;
@@ -20,6 +32,10 @@ export interface IWebsiteInfo extends Document {
   instagram?: string;
   youtube?: string;
   faqs: IFAQ[];
+  pillars: IPillar[];
+  journey: IJourneyItem[];
+  heroImage: string;
+  storyImage: string;
   updatedBy?: mongoose.Types.ObjectId;
   updatedAt: Date;
   createdAt: Date;
@@ -29,6 +45,24 @@ const FAQSchema = new Schema<IFAQ>(
   {
     question: { type: String, required: true },
     answer: { type: String, required: true },
+  },
+  { _id: false }
+);
+
+const PillarSchema = new Schema<IPillar>(
+  {
+    icon: { type: String, default: "" },
+    title: { type: String, required: true },
+    description: { type: String, default: "" },
+  },
+  { _id: false }
+);
+
+const JourneyItemSchema = new Schema<IJourneyItem>(
+  {
+    date: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, default: "" },
   },
   { _id: false }
 );
@@ -49,6 +83,10 @@ const WebsiteInfoSchema = new Schema<IWebsiteInfo>(
     instagram: { type: String, default: null },
     youtube: { type: String, default: null },
     faqs: { type: [FAQSchema], default: [] },
+    pillars: { type: [PillarSchema], default: [] },
+    journey: { type: [JourneyItemSchema], default: [] },
+    heroImage: { type: String, default: "" },
+    storyImage: { type: String, default: "" },
     updatedBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
   },
   { timestamps: true }

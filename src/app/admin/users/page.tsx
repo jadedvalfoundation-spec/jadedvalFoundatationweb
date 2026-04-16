@@ -1,100 +1,103 @@
 import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
-import { formatDate } from "@/lib/utils";
+import Donation from "@/models/Donation";
+import { formatDate, generateInitials } from "@/lib/utils";
+import StatusBadge from "@/components/admin/StatusBadge";
+import PageHeader from "@/components/admin/PageHeader";
+import StatCard from "@/components/admin/StatCard";
 
-export const metadata = { title: "Manage Users" };
+export const metadata = { title: "All Users" };
 
-async function getUsers() {
-  try {
-    await connectDB();
-    const users = await User.find({}).sort({ createdAt: -1 }).limit(50).lean();
-    return users;
-  } catch {
-    return [];
-  }
+async function getData() {
+  await connectDB();
+  const users = await User.find({ role: "user" })
+    .select("-password -resetPasswordToken -resetPasswordExpires")
+    .sort({ createdAt: -1 })
+    .limit(200)
+    .lean();
+
+  const donorStats = await Donation.aggregate([
+    { $match: { status: "completed" } },
+    {
+      $group: {
+        _id: "$donorEmail",
+        totalDonated: { $sum: "$amountUSD" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const donorMap = new Map(donorStats.map(d => [d._id, { totalDonated: d.totalDonated, count: d.count }]));
+
+  const enriched = users.map(u => ({
+    ...u,
+    donorStats: donorMap.get(u.email) ?? null,
+  }));
+
+  const totalUsers = users.length;
+  const activeUsers = users.filter(u => u.isActive).length;
+  const donors = donorStats.length;
+  const totalRaised = donorStats.reduce((s, d) => s + d.totalDonated, 0);
+
+  return { users: enriched, totalUsers, activeUsers, donors, totalRaised };
 }
 
-export default async function AdminUsersPage() {
-  const users = await getUsers();
+export default async function UsersPage() {
+  const { users, totalUsers, activeUsers, donors, totalRaised } = await getData();
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Users</h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Manage all registered users
-          </p>
-        </div>
+      <PageHeader title="All Users" description="Donors, volunteers, and registered users" />
+
+      <div className="mb-6 grid gap-4 sm:grid-cols-4">
+        <StatCard label="Total Users" value={totalUsers} icon="👥" />
+        <StatCard label="Active Users" value={activeUsers} icon="✅" />
+        <StatCard label="Donors" value={donors} icon="💳" />
+        <StatCard label="Total Raised" value={`$${totalRaised.toLocaleString()}`} icon="💰" />
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="border-b bg-gray-50">
             <tr>
-              {["Name", "Email", "Role", "Status", "Joined"].map((col) => (
-                <th
-                  key={col}
-                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-                >
-                  {col}
-                </th>
-              ))}
+              <th className="px-4 py-3 text-left font-medium text-gray-500">User</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Email</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500">Status</th>
+              <th className="px-4 py-3 text-right font-medium text-gray-500">Total Donated</th>
+              <th className="px-4 py-3 text-right font-medium text-gray-500">Donations</th>
+              <th className="px-4 py-3 text-right font-medium text-gray-500">Joined</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {users.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="px-6 py-12 text-center text-sm text-gray-500"
-                >
-                  No users found
+          <tbody className="divide-y">
+            {users.map((user) => (
+              <tr key={String(user._id)} className="hover:bg-gray-50">
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-xs font-bold text-white">
+                      {generateInitials(user.name)}
+                    </div>
+                    <span className="font-medium text-gray-800">{user.name}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-gray-500">{user.email}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge value={user.isActive ? "active" : "inactive"} />
+                </td>
+                <td className="px-4 py-3 text-right">
+                  {user.donorStats ? (
+                    <span className="font-semibold text-brand">${user.donorStats.totalDonated.toLocaleString()}</span>
+                  ) : <span className="text-gray-300">—</span>}
+                </td>
+                <td className="px-4 py-3 text-right text-gray-600">{user.donorStats?.count ?? "—"}</td>
+                <td className="px-4 py-3 text-right text-gray-400 text-xs">
+                  {formatDate(new Date(user.createdAt as Date))}
                 </td>
               </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={String(user._id)} className="hover:bg-gray-50">
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-bold text-white">
-                        {user.name?.[0]?.toUpperCase() ?? "U"}
-                      </div>
-                      <span className="text-sm font-medium text-gray-900">
-                        {user.name}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
-                    {user.email}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-                        user.role === "admin"
-                          ? "bg-purple-100 text-purple-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        user.isActive
-                          ? "bg-brand text-brand"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {user.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
-                    {user.createdAt ? formatDate(user.createdAt as Date) : "—"}
-                  </td>
-                </tr>
-              ))
+            ))}
+            {users.length === 0 && (
+              <tr>
+                <td colSpan={6} className="py-8 text-center text-gray-400">No users found</td>
+              </tr>
             )}
           </tbody>
         </table>

@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema(
     name: String,
     email: { type: String, unique: true },
     password: String,
-    role: { type: String, enum: ["user", "admin"], default: "user" },
+    role: { type: String, enum: ["user", "super_admin", "admin", "finance", "support"], default: "user" },
     isActive: { type: Boolean, default: true },
     image: String,
   },
@@ -44,7 +44,7 @@ async function seed() {
     name: ADMIN_NAME,
     email: ADMIN_EMAIL,
     password: hashedPassword,
-    role: "admin",
+    role: "super_admin",
     isActive: true,
   });
 

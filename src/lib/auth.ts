@@ -6,24 +6,17 @@ import User, { isAdminRole } from "@/models/User";
 
 export const authConfig: NextAuthConfig = {
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: "/admin/login",
+    error: "/admin/login",
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isAdminPath = nextUrl.pathname.startsWith("/admin");
-      const isUserDashboard =
-        nextUrl.pathname.startsWith("/dashboard") ||
-        nextUrl.pathname.match(/^\/[a-z]{2}\/dashboard/);
 
       if (isAdminPath) {
         if (!isLoggedIn) return false;
         return isAdminRole(auth?.user?.role ?? "");
-      }
-
-      if (isUserDashboard) {
-        return isLoggedIn;
       }
 
       return true;
