@@ -1,10 +1,8 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+import { IMPACT_SECTORS, type ImpactSector } from "@/lib/impact-constants";
 
-export const IMPACT_SECTORS = [
-  "Education", "Healthcare", "Sustainability", "Community", "Youth", "Digital", "Agriculture", "Other",
-] as const;
-
-export type ImpactSector = typeof IMPACT_SECTORS[number];
+export { IMPACT_SECTORS } from "@/lib/impact-constants";
+export type { ImpactSector } from "@/lib/impact-constants";
 
 export interface IImpactMedia {
   url: string;

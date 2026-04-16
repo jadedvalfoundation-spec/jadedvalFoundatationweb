@@ -8,7 +8,7 @@ import Textarea from "@/components/ui/Textarea";
 import Modal from "@/components/admin/Modal";
 import ImageUpload from "@/components/ui/ImageUpload";
 import RichTextEditor from "@/components/ui/RichTextEditor";
-import { IMPACT_SECTORS } from "@/models/Impact";
+import { IMPACT_SECTORS } from "@/lib/impact-constants";
 
 type Tab = "impacts" | "stories";
 
