@@ -10,6 +10,7 @@ import WebsiteInfo from "@/models/WebsiteInfo";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { translate, translateMany } from "@/lib/translate";
+import RichReadMore from "@/components/shared/RichReadMore";
 
 export const dynamic = "force-dynamic";
 
@@ -84,11 +85,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.badge}</span>
               <h1 className="mt-3 font-heading text-4xl font-bold text-white sm:text-5xl">{d.title}</h1>
               {aboutUs ? (
-                <div
-                  className="rich-content mt-6 text-gray-400"
-                  style={{ lineHeight: "1.8" }}
-                  dangerouslySetInnerHTML={{ __html: aboutUs }}
-                />
+                <RichReadMore html={aboutUs} className="mt-6 text-gray-400" collapsedHeight={160} fadeColor="#0c1620" style={{ lineHeight: "1.8" }} />
               ) : (
                 <p className="mt-6 text-gray-600 italic">Our story is coming soon.</p>
               )}
@@ -124,7 +121,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               </div>
               <h2 className="font-heading text-xl font-bold text-white">{d.visionTitle}</h2>
               {vision ? (
-                <div className="rich-content mt-3 text-gray-400" dangerouslySetInnerHTML={{ __html: vision }} />
+                <RichReadMore html={vision} className="mt-3 text-gray-400" collapsedHeight={120} fadeColor="#0f1e2a" />
               ) : (
                 <p className="mt-3 text-gray-600 italic">Vision coming soon.</p>
               )}
@@ -138,7 +135,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               </div>
               <h2 className="font-heading text-xl font-bold text-white">{d.missionTitle}</h2>
               {mission ? (
-                <div className="rich-content mt-3 text-gray-400" dangerouslySetInnerHTML={{ __html: mission }} />
+                <RichReadMore html={mission} className="mt-3 text-gray-400" collapsedHeight={120} fadeColor="#0f1e2a" />
               ) : (
                 <p className="mt-3 text-gray-600 italic">Mission coming soon.</p>
               )}
@@ -179,21 +176,40 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
 
           {displayJourney.length > 0 ? (
             <div className="relative">
-              {/* Horizontal connector line (desktop) */}
-              <div className="absolute left-0 right-0 top-3 hidden h-px lg:block"
-                style={{ background: "rgba(255,255,255,0.08)" }} />
+              {/* Connecting line behind the dots — vertically centred with the 12px dots */}
+              <div
+                className="absolute h-px"
+                style={{
+                  top: "6px",
+                  left: "1rem",
+                  right: "1rem",
+                  background: "rgba(255,255,255,0.08)",
+                  zIndex: 0,
+                }}
+              />
 
-              <div className={`grid gap-8 ${displayJourney.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-3"}`}>
+              {/* Horizontal scroll row */}
+              <div
+                className="flex gap-6 overflow-x-auto pb-4"
+                style={{ scrollbarWidth: "thin", scrollbarColor: "#00CCBB33 transparent" }}
+              >
                 {displayJourney.map((item, i) => (
-                  <div key={i} className="relative">
-                    <div className="mb-6 flex items-center gap-3 lg:mb-0 lg:flex-col lg:items-start">
-                      <div className="relative z-10 h-3 w-3 flex-shrink-0 rounded-full bg-brand lg:mb-6" />
-                    </div>
-                    <div className="rounded-2xl p-6"
-                      style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.2)" }}>
+                  <div key={i} className="relative flex-shrink-0 w-72">
+                    {/* Dot */}
+                    <div className="relative z-10 mb-5 h-3 w-3 rounded-full bg-brand" />
+
+                    <div
+                      className="rounded-2xl p-6"
+                      style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.2)" }}
+                    >
                       <span className="text-xs font-bold text-brand">{item.date}</span>
                       <h3 className="mt-2 font-heading text-lg font-bold text-white">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.description}</p>
+                      <RichReadMore
+                        html={`<p>${item.description}</p>`}
+                        className="mt-2 text-sm leading-relaxed text-gray-400"
+                        collapsedHeight={72}
+                        fadeColor="#0f1e2a"
+                      />
                     </div>
                   </div>
                 ))}
