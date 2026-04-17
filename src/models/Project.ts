@@ -15,6 +15,7 @@ export interface IProject extends Document {
   imagePublicId?: string;
   description: string;
   status: ProjectStatus;
+  manualAmountRaised?: number;
   // Completed-only fields
   totalAmountUsed?: number;
   achievement?: string;
@@ -60,6 +61,7 @@ const ProjectSchema = new Schema<IProject>(
       enum: ["upcoming", "ongoing", "completed"],
       default: "upcoming",
     },
+    manualAmountRaised: { type: Number, default: null },
     totalAmountUsed: { type: Number, default: null },
     achievement: { type: String, default: null },
     isActive: { type: Boolean, default: true },

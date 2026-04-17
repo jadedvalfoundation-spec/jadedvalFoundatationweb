@@ -31,7 +31,7 @@ async function getData(id: string) {
     const p = project as typeof project & {
       _id: unknown; name: string; status: string; targetAmount: number;
       duration: string; startDate?: Date; description: string; image?: string;
-      totalAmountUsed?: number; achievement?: string;
+      manualAmountRaised?: number | null; totalAmountUsed?: number; achievement?: string;
       program: { name: string };
     };
 
@@ -40,8 +40,10 @@ async function getData(id: string) {
       { $group: { _id: null, total: { $sum: "$amountUSD" }, count: { $sum: 1 } } },
     ]);
 
-    const amountRaised = raisedAgg[0]?.total ?? 0;
+    const donationTotal = raisedAgg[0]?.total ?? 0;
     const donorCount = raisedAgg[0]?.count ?? 0;
+    // Use manually set amount if available, otherwise fall back to verified donations
+    const amountRaised = p.manualAmountRaised != null ? p.manualAmountRaised : donationTotal;
     const pct = p.targetAmount > 0
       ? Math.min(100, (amountRaised / p.targetAmount) * 100)
       : 0;

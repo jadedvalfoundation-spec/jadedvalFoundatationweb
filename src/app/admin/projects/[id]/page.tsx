@@ -6,6 +6,7 @@ import Project from "@/models/Project";
 import Donation from "@/models/Donation";
 import StatCard from "@/components/admin/StatCard";
 import StatusBadge from "@/components/admin/StatusBadge";
+import SetAmountRaised from "@/components/admin/SetAmountRaised";
 import { formatDate } from "@/lib/utils";
 
 async function getData(id: string) {
@@ -46,11 +47,15 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
   type P = typeof project & {
     name: string; status: string; targetAmount: number; duration: string;
     startDate?: Date; endDate?: Date; description: string; image?: string;
-    totalAmountUsed?: number; achievement?: string;
+    manualAmountRaised?: number | null; totalAmountUsed?: number; achievement?: string;
     program: { _id: string; name: string };
     createdBy: { name: string };
   };
   const p = project as unknown as P;
+  const effectiveAmountRaised = p.manualAmountRaised != null ? p.manualAmountRaised : amountRaised;
+  const effectivePct = p.targetAmount > 0
+    ? Math.min(100, (effectiveAmountRaised / p.targetAmount) * 100)
+    : 0;
 
   return (
     <div>
@@ -78,24 +83,41 @@ export default async function ProjectDetail({ params }: { params: Promise<{ id: 
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Target" value={`$${p.targetAmount.toLocaleString()}`} icon="🎯" />
-        <StatCard label="Raised" value={`$${amountRaised.toLocaleString()}`} icon="💰" />
+        <StatCard label="Raised (shown)" value={`$${effectiveAmountRaised.toLocaleString()}`} icon="💰" />
         <StatCard label="Donors" value={donorCount} icon="👥" />
-        <StatCard label="Progress" value={`${pct.toFixed(1)}%`} icon="📊" />
+        <StatCard label="Progress" value={`${effectivePct.toFixed(1)}%`} icon="📊" />
       </div>
 
       {/* Progress bar */}
       <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="mb-2 flex justify-between text-sm">
-          <span className="font-medium text-gray-700">Fundraising Progress</span>
-          <span className="text-brand font-semibold">{pct.toFixed(1)}%</span>
+          <span className="font-medium text-gray-700">
+            Fundraising Progress
+            {p.manualAmountRaised != null && (
+              <span className="ml-2 rounded-full bg-brand/10 px-2 py-0.5 text-xs font-semibold text-brand">
+                manual override
+              </span>
+            )}
+          </span>
+          <span className="text-brand font-semibold">{effectivePct.toFixed(1)}%</span>
         </div>
         <div className="h-3 w-full rounded-full bg-gray-200">
-          <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${effectivePct}%` }} />
         </div>
         <div className="mt-2 flex justify-between text-xs text-gray-500">
-          <span>${amountRaised.toLocaleString()} raised</span>
+          <span>${effectiveAmountRaised.toLocaleString()} raised</span>
           <span>${p.targetAmount.toLocaleString()} goal</span>
         </div>
+      </div>
+
+      {/* Manual amount raised override */}
+      <div className="mb-6">
+        <SetAmountRaised
+          projectId={String(p._id ?? "")}
+          targetAmount={p.targetAmount}
+          currentManual={p.manualAmountRaised ?? null}
+          donationTotal={amountRaised}
+        />
       </div>
 
       {/* Completed info */}
