@@ -48,10 +48,12 @@ async function getData() {
       const p = proj as typeof proj & {
         _id: unknown; name: string; status: string; targetAmount: number;
         description: string; image?: string; program: unknown;
+        manualAmountRaised?: number | null;
       };
       const progId = String(p.program);
       if (!projectsByProgram.has(progId)) projectsByProgram.set(progId, []);
       const donations = donationMap.get(String(p._id)) ?? { total: 0, count: 0 };
+      const raised = p.manualAmountRaised != null ? p.manualAmountRaised : donations.total;
       projectsByProgram.get(progId)!.push({
         _id: String(p._id),
         name: p.name,
@@ -59,7 +61,7 @@ async function getData() {
         image: p.image ?? undefined,
         status: p.status as ProjectCard["status"],
         targetAmount: p.targetAmount,
-        raised: donations.total,
+        raised,
         donorCount: donations.count,
       });
     }

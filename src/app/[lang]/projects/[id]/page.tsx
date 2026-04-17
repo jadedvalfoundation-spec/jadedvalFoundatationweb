@@ -176,11 +176,10 @@ export default async function PublicProjectPage({
         </div>
 
         {/* Stats row */}
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="mt-8 grid grid-cols-3 gap-4">
           {[
             { label: d.goal, value: `$${p.targetAmount.toLocaleString()}` },
             { label: d.raised, value: `$${amountRaised.toLocaleString()}` },
-            { label: d.donors, value: donorCount.toLocaleString() },
             { label: d.status, value: `${pct.toFixed(1)}%` },
           ].map((stat) => (
             <div key={stat.label} className="rounded-xl p-4 text-center"

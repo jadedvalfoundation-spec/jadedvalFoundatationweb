@@ -51,28 +51,13 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
   const journey = info?.journey ?? [];
   const storyImage = info?.storyImage ?? "";
 
-  const defaultPillars = [
-    { icon: "🛡", title: "Integrity", description: "Honoring our promises with radical transparency in every project we initiate." },
-    { icon: "💚", title: "Empathy", description: "Understanding lived experiences before implementing technical solutions." },
-    { icon: "📈", title: "Growth", description: "Committing to continuous evolution for both our foundation and our partners." },
-    { icon: "♦", title: "Transparency", description: "Open-access reporting to ensure every contribution drives measurable impact." },
-  ];
+  const pillarTitles = pillars.length > 0 ? await translateMany(pillars.map(p => p.title), lang as Locale) : [];
+  const pillarDescs  = pillars.length > 0 ? await translateMany(pillars.map(p => p.description), lang as Locale) : [];
+  const displayPillars = pillars.map((p, i) => ({ ...p, title: pillarTitles[i], description: pillarDescs[i] }));
 
-  const rawPillars = pillars.length > 0 ? pillars : defaultPillars;
-  const pillarTitles = await translateMany(rawPillars.map(p => p.title), lang as Locale);
-  const pillarDescs = await translateMany(rawPillars.map(p => p.description), lang as Locale);
-  const displayPillars = rawPillars.map((p, i) => ({ ...p, title: pillarTitles[i], description: pillarDescs[i] }));
-
-  const defaultJourney = [
-    { date: "Jan 2024", title: "The Genesis", description: "Foundation established with an initial focus on regional digital literacy hubs." },
-    { date: "April 2024", title: "Alpha Pilot", description: "Successful deployment of our first AI-assisted learning initiative in three rural districts." },
-    { date: "Present", title: "The Expansion", description: "Scaling operations globally, reaching over 50,000 lives through decentralized empowerment models." },
-  ];
-
-  const rawJourney = journey.length > 0 ? journey : defaultJourney;
-  const journeyTitles = await translateMany(rawJourney.map(j => j.title), lang as Locale);
-  const journeyDescs = await translateMany(rawJourney.map(j => j.description), lang as Locale);
-  const displayJourney = rawJourney.map((j, i) => ({ ...j, title: journeyTitles[i], description: journeyDescs[i] }));
+  const journeyTitles = journey.length > 0 ? await translateMany(journey.map(j => j.title), lang as Locale) : [];
+  const journeyDescs  = journey.length > 0 ? await translateMany(journey.map(j => j.description), lang as Locale) : [];
+  const displayJourney = journey.map((j, i) => ({ ...j, title: journeyTitles[i], description: journeyDescs[i] }));
 
   return (
     <div className="min-h-screen bg-[#0c1620]">
@@ -93,14 +78,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
                   dangerouslySetInnerHTML={{ __html: aboutUs }}
                 />
               ) : (
-                <div className="mt-6 space-y-4 text-gray-400" style={{ lineHeight: "1.8" }}>
-                  <p>
-                    Born in the early days of 2024, the Jade D&apos;Val Foundation emerged from a singular, powerful realization: that the rapid evolution of technology must be tethered to an unwavering commitment to human welfare.
-                  </p>
-                  <p>
-                    We began as a collective of technologists and social advocates who saw &ldquo;Digital Alchemy&rdquo; not as a buzzword, but as a practice — transforming cold data and systems into golden opportunities for community development.
-                  </p>
-                </div>
+                <p className="mt-6 text-gray-600 italic">Our story is coming soon.</p>
               )}
             </div>
 
@@ -112,12 +90,9 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
                     className="h-80 w-full object-cover lg:h-[420px]" />
                 </div>
               ) : (
-                <div className="flex h-80 w-full flex-col items-center justify-center rounded-2xl lg:h-[420px]"
-                  style={{ background: "linear-gradient(135deg, #132535 0%, #1a3a50 100%)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <div className="rounded-2xl bg-[#0c1620]/60 p-8 text-center">
-                    <p className="font-heading text-2xl font-bold text-brand">Jade the Hub</p>
-                    <p className="mt-2 text-sm text-gray-400">Community DevlUPoment</p>
-                  </div>
+                <div className="flex h-80 w-full items-center justify-center rounded-2xl lg:h-[420px]"
+                  style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <span className="text-4xl opacity-20">🌍</span>
                 </div>
               )}
             </div>
@@ -139,9 +114,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               {vision ? (
                 <div className="rich-content mt-3 text-gray-400" dangerouslySetInnerHTML={{ __html: vision }} />
               ) : (
-                <p className="mt-3 leading-relaxed text-gray-400">
-                  To create a global ecosystem where every community possesses the digital literacy and empathetic support required to architect their own prosperity and lasting empowerment.
-                </p>
+                <p className="mt-3 text-gray-600 italic">Vision coming soon.</p>
               )}
             </div>
 
@@ -155,9 +128,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
               {mission ? (
                 <div className="rich-content mt-3 text-gray-400" dangerouslySetInnerHTML={{ __html: mission }} />
               ) : (
-                <p className="mt-3 leading-relaxed text-gray-400">
-                  To bridge the gap between innovation and accessibility, fostering self-reliance through advanced technical training paired with deep-rooted community compassion.
-                </p>
+                <p className="mt-3 text-gray-600 italic">Mission coming soon.</p>
               )}
             </div>
           </div>
@@ -168,18 +139,24 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-10 text-center font-heading text-3xl font-bold text-white">{d.pillarsTitle}</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {displayPillars.map((pillar, i) => (
-              <div key={i} className="rounded-2xl p-6"
-                style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-xl">
-                  {pillar.icon}
+          {displayPillars.length > 0 ? (
+            <div className={`grid gap-6 sm:grid-cols-2 ${displayPillars.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-4"}`}>
+              {displayPillars.map((pillar, i) => (
+                <div key={i} className="rounded-2xl p-6"
+                  style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  {pillar.icon && (
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-xl">
+                      {pillar.icon}
+                    </div>
+                  )}
+                  <h3 className="font-heading text-base font-bold text-white">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{pillar.description}</p>
                 </div>
-                <h3 className="font-heading text-base font-bold text-white">{pillar.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">{pillar.description}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-600 italic">Our pillars are being set up. Check back soon.</p>
+          )}
         </div>
       </section>
 
@@ -188,30 +165,31 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-14 font-heading text-3xl font-bold text-white">{d.journeyTitle}</h2>
 
-          {/* Timeline */}
-          <div className="relative">
-            {/* Horizontal connector line (desktop) */}
-            <div className="absolute left-0 right-0 top-3 hidden h-px lg:block"
-              style={{ background: "rgba(255,255,255,0.08)" }} />
+          {displayJourney.length > 0 ? (
+            <div className="relative">
+              {/* Horizontal connector line (desktop) */}
+              <div className="absolute left-0 right-0 top-3 hidden h-px lg:block"
+                style={{ background: "rgba(255,255,255,0.08)" }} />
 
-            <div className="grid gap-8 lg:grid-cols-3">
-              {displayJourney.map((item, i) => (
-                <div key={i} className="relative">
-                  {/* Dot */}
-                  <div className="mb-6 flex items-center gap-3 lg:mb-0 lg:flex-col lg:items-start">
-                    <div className="relative z-10 h-3 w-3 flex-shrink-0 rounded-full bg-brand lg:mb-6" />
+              <div className={`grid gap-8 ${displayJourney.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-3"}`}>
+                {displayJourney.map((item, i) => (
+                  <div key={i} className="relative">
+                    <div className="mb-6 flex items-center gap-3 lg:mb-0 lg:flex-col lg:items-start">
+                      <div className="relative z-10 h-3 w-3 flex-shrink-0 rounded-full bg-brand lg:mb-6" />
+                    </div>
+                    <div className="rounded-2xl p-6"
+                      style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.2)" }}>
+                      <span className="text-xs font-bold text-brand">{item.date}</span>
+                      <h3 className="mt-2 font-heading text-lg font-bold text-white">{item.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.description}</p>
+                    </div>
                   </div>
-                  {/* Card */}
-                  <div className="rounded-2xl p-6"
-                    style={{ background: "#0f1e2a", border: "1px solid rgba(0,204,187,0.2)" }}>
-                    <span className="text-xs font-bold text-brand">{item.date}</span>
-                    <h3 className="mt-2 font-heading text-lg font-bold text-white">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-400">{item.description}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="text-gray-600 italic">Our journey timeline is being written. Check back soon.</p>
+          )}
         </div>
       </section>
 
