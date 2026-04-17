@@ -6,6 +6,7 @@ import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
 import Project from "@/models/Project";
+import BankAccount from "@/models/BankAccount";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import DonateForm from "@/components/shared/DonateForm";
@@ -25,21 +26,21 @@ export const metadata = {
 async function getData(projectId?: string) {
   try {
     await connectDB();
-    const [info, project] = await Promise.all([
+    const [info, project, bankAccounts] = await Promise.all([
       WebsiteInfo.findOne()
-        .select("bankName bankAccountName bankAccountNumber bankSortCode bankSwiftCode bankTransferNote impactMade")
-        .lean() as Promise<{
-          bankName?: string; bankAccountName?: string; bankAccountNumber?: string;
-          bankSortCode?: string; bankSwiftCode?: string; bankTransferNote?: string;
-          impactMade?: number;
-        } | null>,
+        .select("impactMade")
+        .lean() as Promise<{ impactMade?: number } | null>,
       projectId
         ? Project.findById(projectId).select("name program status").lean()
         : null,
+      BankAccount.find({ isActive: true })
+        .select("accountName bankName accountNumber")
+        .sort({ createdAt: 1 })
+        .lean() as Promise<{ _id: unknown; accountName: string; bankName: string; accountNumber: string }[]>,
     ]);
-    return { info: info ?? {}, project };
+    return { info: info ?? {}, project, bankAccounts };
   } catch {
-    return { info: {}, project: null };
+    return { info: {}, project: null, bankAccounts: [] };
   }
 }
 
@@ -54,7 +55,7 @@ export default async function DonatePage({
   const sp = await searchParams;
   if (!hasLocale(lang)) notFound();
 
-  const [{ info, project }, dict] = await Promise.all([
+  const [{ info, project, bankAccounts }, dict] = await Promise.all([
     getData(sp.project),
     getDictionary(lang as Locale),
   ]);
@@ -65,8 +66,6 @@ export default async function DonatePage({
 
   const projectName = (project as { name?: string } | null)?.name ?? sp.name;
   const projectId = sp.project;
-
-  const flwPublicKey = process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY ?? "";
 
   const impactMade = (info as { impactMade?: number }).impactMade ?? 0;
 
@@ -136,8 +135,12 @@ export default async function DonatePage({
             <DonateForm
               projectId={projectId}
               projectName={projectName}
-              flwPublicKey={flwPublicKey || undefined}
-              bankDetails={info as Parameters<typeof DonateForm>[0]["bankDetails"]}
+              bankAccounts={bankAccounts.map((a) => ({
+                _id: String(a._id),
+                accountName: a.accountName,
+                bankName: a.bankName,
+                accountNumber: a.accountNumber,
+              }))}
               userCurrency={userCurrency}
             />
           </div>
