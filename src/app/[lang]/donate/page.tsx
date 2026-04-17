@@ -10,7 +10,17 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import DonateForm from "@/components/shared/DonateForm";
 
-export const metadata = { title: "Donate — Jade D'Val Foundation" };
+export const metadata = {
+  title: "Donate",
+  description:
+    "Support Jade D'Val Foundation and help transform lives. Your donation funds education, healthcare, and community development programs across Africa.",
+  openGraph: {
+    title: "Donate | Jade D'Val Foundation",
+    description: "Help transform lives — fund education, healthcare, and community development.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 async function getData(projectId?: string) {
   try {

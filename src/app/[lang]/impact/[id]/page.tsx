@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getDictionary } from "@/lib/dictionaries";
@@ -10,6 +11,8 @@ import mongoose from "mongoose";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { translate } from "@/lib/translate";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jadedvalfoundation.org";
 
 const SECTOR_COLORS: Record<string, string> = {
   Education: "#00CCBB",
@@ -32,6 +35,44 @@ async function getImpact(id: string) {
   } catch {
     return null;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; id: string }>;
+}): Promise<Metadata> {
+  const { lang, id } = await params;
+  const rawImpact = await getImpact(id);
+  if (!rawImpact) return {};
+
+  const impact = rawImpact as { title: string; description: string; media: Array<{ url: string; type: string }> };
+  const heroImg = impact.media?.find((m) => m.type === "image")?.url ?? "";
+  const canonical = `${SITE_URL}/${lang}/impact/${id}`;
+
+  return {
+    title: impact.title,
+    description: impact.description,
+    alternates: {
+      canonical,
+      languages: Object.fromEntries(
+        ["en", "es", "fr", "ar", "zh"].map((l) => [l, `${SITE_URL}/${l}/impact/${id}`])
+      ),
+    },
+    openGraph: {
+      type: "article",
+      url: canonical,
+      title: impact.title,
+      description: impact.description,
+      images: heroImg ? [{ url: heroImg, width: 1200, height: 630, alt: impact.title }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: impact.title,
+      description: impact.description,
+      images: heroImg ? [heroImg] : [],
+    },
+  };
 }
 
 export default async function ImpactDetailPage({
@@ -68,9 +109,31 @@ export default async function ImpactDetailPage({
   const sectorColor = SECTOR_COLORS[impact.sector] ?? "#00CCBB";
   const coverImage = impact.media.find((m) => m.type === "image");
   const additionalMedia = impact.media.slice(1);
+  const canonical = `${SITE_URL}/${lang}/impact/${id}`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: impactTitle,
+    description: impactDescription,
+    image: coverImage ? [coverImage.url] : [],
+    datePublished: new Date(impact.createdAt as string).toISOString(),
+    author: [{ "@type": "Organization", name: "Jade D'Val Foundation", url: SITE_URL }],
+    publisher: {
+      "@type": "Organization",
+      name: "Jade D'Val Foundation",
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+  };
 
   return (
     <div className="min-h-screen bg-[#0c1620]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar lang={lang as Locale} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}

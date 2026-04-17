@@ -12,7 +12,17 @@ import Footer from "@/components/shared/Footer";
 import ProgramsDisplay from "@/components/shared/ProgramsDisplay";
 import type { ProgramSection, ProjectCard } from "@/components/shared/ProgramsDisplay";
 
-export const metadata = { title: "Programs — Jade D'Val Foundation" };
+export const metadata = {
+  title: "Programs & Projects",
+  description:
+    "Explore Jade D'Val Foundation's active programs and projects driving change in education, healthcare, sustainability, and community development.",
+  openGraph: {
+    title: "Programs & Projects | Jade D'Val Foundation",
+    description: "Active programs and projects driving change across communities.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 async function getData() {
   try {

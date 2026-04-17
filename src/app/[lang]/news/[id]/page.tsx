@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getDictionary } from "@/lib/dictionaries";
@@ -10,6 +11,8 @@ import Blog from "@/models/Blog";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import mongoose from "mongoose";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jadedvalfoundation.org";
 
 type BlogMedia = { url: string; publicId: string; type: "image" | "video" };
 
@@ -35,6 +38,48 @@ async function getPost(id: string): Promise<BlogDoc | null> {
   } catch {
     return null;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; id: string }>;
+}): Promise<Metadata> {
+  const { lang, id } = await params;
+  const post = await getPost(id);
+  if (!post) return {};
+
+  const title = post.title;
+  const description = post.description;
+  const heroImg = post.media?.find((m) => m.type === "image")?.url ?? "";
+  const publishedTime = (post.publishedAt ?? post.createdAt).toISOString();
+  const canonical = `${SITE_URL}/${lang}/news/${post.slug || id}`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical,
+      languages: Object.fromEntries(
+        ["en", "es", "fr", "ar", "zh"].map((l) => [l, `${SITE_URL}/${l}/news/${post.slug || id}`])
+      ),
+    },
+    openGraph: {
+      type: "article",
+      url: canonical,
+      title,
+      description,
+      publishedTime,
+      authors: ["Jade D'Val Foundation"],
+      images: heroImg ? [{ url: heroImg, width: 1200, height: 630, alt: title }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: heroImg ? [heroImg] : [],
+    },
+  };
 }
 
 export default async function NewsDetailPage({
@@ -68,8 +113,32 @@ export default async function NewsDetailPage({
   // Rich HTML body: keep original markup to preserve formatting
   const postDetails = post.details;
 
+  const canonical = `${SITE_URL}/${lang}/news/${post.slug || id}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: postTitle,
+    description: postDescription,
+    image: heroImg ? [heroImg] : [],
+    datePublished: new Date(date).toISOString(),
+    dateModified: new Date(date).toISOString(),
+    author: [{ "@type": "Organization", name: "Jade D'Val Foundation", url: SITE_URL }],
+    publisher: {
+      "@type": "Organization",
+      name: "Jade D'Val Foundation",
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+    url: canonical,
+  };
+
   return (
     <div className="min-h-screen bg-[#0c1620]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar lang={lang as Locale} />
 
       {/* Hero image */}

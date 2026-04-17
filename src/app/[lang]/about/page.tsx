@@ -24,7 +24,17 @@ async function getInfo() {
   }
 }
 
-export const metadata = { title: "About Us — Jade D'Val Foundation" };
+export const metadata = {
+  title: "About Us",
+  description:
+    "Learn about Jade D'Val Foundation — our mission, vision, and the values driving our work to empower communities across Africa through grassroots initiatives.",
+  openGraph: {
+    title: "About Us | Jade D'Val Foundation",
+    description: "Our mission, vision, and commitment to empowering communities.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 export default async function AboutPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;

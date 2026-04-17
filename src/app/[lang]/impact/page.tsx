@@ -13,7 +13,17 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import SuccessStoryCarousel from "@/components/shared/SuccessStoryCarousel";
 
-export const metadata = { title: "Impact — Jade D'Val Foundation" };
+export const metadata = {
+  title: "Impact & Stories",
+  description:
+    "See the real-world impact of Jade D'Val Foundation — lives changed, communities rebuilt, and futures secured through education, healthcare, and sustainable development.",
+  openGraph: {
+    title: "Impact & Stories | Jade D'Val Foundation",
+    description: "Real-world impact across education, healthcare, community, and sustainability.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 async function getData() {
   try {

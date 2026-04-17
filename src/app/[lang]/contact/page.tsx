@@ -10,7 +10,17 @@ import ContactForm from "@/components/shared/ContactForm";
 import FaqAccordion from "@/components/shared/FaqAccordion";
 import { translateMany } from "@/lib/translate";
 
-export const metadata = { title: "Contact Us — Jade D'Val Foundation" };
+export const metadata = {
+  title: "Contact Us",
+  description:
+    "Get in touch with Jade D'Val Foundation. We welcome questions, partnership inquiries, media requests, and feedback.",
+  openGraph: {
+    title: "Contact Us | Jade D'Val Foundation",
+    description: "Reach out for partnerships, questions, media, and more.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 async function getInfo() {
   try {

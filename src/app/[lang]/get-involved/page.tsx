@@ -9,7 +9,17 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import GetInvolvedForms from "@/components/shared/GetInvolvedForms";
 
-export const metadata = { title: "Get Involved — Jade D'Val Foundation" };
+export const metadata = {
+  title: "Get Involved",
+  description:
+    "Volunteer, partner, or collaborate with Jade D'Val Foundation. Join us in empowering communities through education, healthcare, and sustainable development.",
+  openGraph: {
+    title: "Get Involved | Jade D'Val Foundation",
+    description: "Volunteer, partner, or collaborate to empower communities.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 async function getStats() {
   try {

@@ -8,7 +8,18 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import NewsGrid from "@/components/shared/NewsGrid";
 
-export const metadata = { title: "The Journal — Jade D'Val Foundation" };
+export const metadata = {
+  title: "The Journal",
+  description:
+    "Read the latest news, stories of impact, and updates from Jade D'Val Foundation — empowering communities across Africa and beyond.",
+  openGraph: {
+    title: "The Journal | Jade D'Val Foundation",
+    description:
+      "Latest news, stories of impact, and updates from Jade D'Val Foundation.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 const LIMIT = 6;
 

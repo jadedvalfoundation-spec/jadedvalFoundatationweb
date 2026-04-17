@@ -1,16 +1,20 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { getDictionary } from "@/lib/dictionaries";
 import { translate } from "@/lib/translate";
 import connectDB from "@/lib/mongodb";
 import Project from "@/models/Project";
+import "@/models/Program"; // register model so populate("program") resolves
 import Donation from "@/models/Donation";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import mongoose from "mongoose";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jadedvalfoundation.org";
 
 async function getData(id: string) {
   try {
@@ -55,6 +59,44 @@ const STATUS_COLOR: Record<string, string> = {
   ongoing: "bg-brand/20 text-brand",
   completed: "bg-green-500/20 text-green-300",
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; id: string }>;
+}): Promise<Metadata> {
+  const { lang, id } = await params;
+  const data = await getData(id);
+  if (!data) return {};
+
+  const { p } = data;
+  const desc = (p.description as string).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160);
+  const canonical = `${SITE_URL}/${lang}/projects/${id}`;
+
+  return {
+    title: p.name,
+    description: desc,
+    alternates: {
+      canonical,
+      languages: Object.fromEntries(
+        ["en", "es", "fr", "ar", "zh"].map((l) => [l, `${SITE_URL}/${l}/projects/${id}`])
+      ),
+    },
+    openGraph: {
+      type: "article",
+      url: canonical,
+      title: p.name,
+      description: desc,
+      images: p.image ? [{ url: p.image as string, width: 1200, height: 630, alt: p.name }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: p.name,
+      description: desc,
+      images: p.image ? [p.image as string] : [],
+    },
+  };
+}
 
 export default async function PublicProjectPage({
   params,
