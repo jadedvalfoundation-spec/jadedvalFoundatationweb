@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import ImageUpload from "@/components/ui/ImageUpload";
+import RichTextEditor from "@/components/ui/RichTextEditor";
 
 interface FAQ { question: string; answer: string }
 interface Pillar { icon: string; title: string; description: string }
@@ -217,26 +218,30 @@ export default function WebsiteInfoPage() {
           )}
 
           {activeSection === "About" && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <h2 className="text-base font-semibold text-gray-800">About the Foundation</h2>
-              <Textarea
-                label="About Us"
-                rows={5}
-                value={info.aboutUs}
-                onChange={e => setInfo({ ...info, aboutUs: e.target.value })}
-              />
-              <Textarea
-                label="Our Mission"
-                rows={4}
-                value={info.mission}
-                onChange={e => setInfo({ ...info, mission: e.target.value })}
-              />
-              <Textarea
-                label="Our Vision"
-                rows={4}
-                value={info.vision}
-                onChange={e => setInfo({ ...info, vision: e.target.value })}
-              />
+              <div>
+                <p className="mb-1.5 text-sm font-medium text-gray-700">Our Story</p>
+                <p className="mb-2 text-xs text-gray-400">Shown on the About page alongside the story image.</p>
+                <RichTextEditor
+                  value={info.aboutUs}
+                  onChange={val => setInfo(prev => ({ ...prev, aboutUs: val }))}
+                />
+              </div>
+              <div>
+                <p className="mb-1.5 text-sm font-medium text-gray-700">Our Mission</p>
+                <RichTextEditor
+                  value={info.mission}
+                  onChange={val => setInfo(prev => ({ ...prev, mission: val }))}
+                />
+              </div>
+              <div>
+                <p className="mb-1.5 text-sm font-medium text-gray-700">Our Vision</p>
+                <RichTextEditor
+                  value={info.vision}
+                  onChange={val => setInfo(prev => ({ ...prev, vision: val }))}
+                />
+              </div>
             </div>
           )}
 
@@ -354,13 +359,6 @@ export default function WebsiteInfoPage() {
                         Remove
                       </button>
                     </div>
-                    <Input
-                      label="Icon (emoji or icon name)"
-                      value={pillar.icon}
-                      onChange={e => updatePillar(i, "icon", e.target.value)}
-                      className="mb-3"
-                      placeholder="e.g. 💎 or shield"
-                    />
                     <Input
                       label="Title"
                       value={pillar.title}
