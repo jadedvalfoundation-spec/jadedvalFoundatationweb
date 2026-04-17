@@ -12,6 +12,8 @@ import Footer from "@/components/shared/Footer";
 import NewsletterForm from "@/components/shared/NewsletterForm";
 import { translate } from "@/lib/translate";
 
+export const dynamic = "force-dynamic";
+
 async function getData() {
   try {
     await connectDB();

@@ -13,6 +13,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import SuccessStoryCarousel from "@/components/shared/SuccessStoryCarousel";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Impact & Stories",
   description:

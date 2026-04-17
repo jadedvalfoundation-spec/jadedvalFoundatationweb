@@ -8,6 +8,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import NewsGrid from "@/components/shared/NewsGrid";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "The Journal",
   description:

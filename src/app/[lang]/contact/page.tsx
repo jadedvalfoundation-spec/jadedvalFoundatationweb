@@ -10,6 +10,8 @@ import ContactForm from "@/components/shared/ContactForm";
 import FaqAccordion from "@/components/shared/FaqAccordion";
 import { translateMany } from "@/lib/translate";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Contact Us",
   description:

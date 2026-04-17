@@ -12,6 +12,8 @@ import Footer from "@/components/shared/Footer";
 import ProgramsDisplay from "@/components/shared/ProgramsDisplay";
 import type { ProgramSection, ProjectCard } from "@/components/shared/ProgramsDisplay";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Programs & Projects",
   description:

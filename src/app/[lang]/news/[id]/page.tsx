@@ -12,6 +12,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import mongoose from "mongoose";
 
+export const dynamic = "force-dynamic";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jadedvalfoundation.org";
 
 type BlogMedia = { url: string; publicId: string; type: "image" | "video" };

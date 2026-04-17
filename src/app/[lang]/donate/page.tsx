@@ -11,6 +11,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import DonateForm from "@/components/shared/DonateForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Donate",
   description:

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { hasLocale } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
+
 import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import WebsiteInfo from "@/models/WebsiteInfo";
@@ -10,10 +11,15 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { translate, translateMany } from "@/lib/translate";
 
+export const dynamic = "force-dynamic";
+
 async function getInfo() {
   try {
     await connectDB();
-    return await WebsiteInfo.findOne().lean() as {
+    return await WebsiteInfo.findOne(
+      {},
+      { aboutUs: 1, mission: 1, vision: 1, pillars: 1, journey: 1, storyImage: 1 }
+    ).lean() as {
       aboutUs?: string; mission?: string; vision?: string;
       pillars?: { icon: string; title: string; description: string }[];
       journey?: { date: string; title: string; description: string }[];
@@ -44,9 +50,15 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
   const d = dict.about;
   const dc = dict.common;
 
-  const aboutUs = info?.aboutUs ?? "";
-  const mission = info?.mission ?? "";
-  const vision = info?.vision ?? "";
+  function stripEmpty(html: string | undefined) {
+    if (!html) return "";
+    const text = html.replace(/<[^>]+>/g, "").trim();
+    return text ? html : "";
+  }
+
+  const aboutUs = stripEmpty(info?.aboutUs);
+  const mission = stripEmpty(info?.mission);
+  const vision  = stripEmpty(info?.vision);
   const pillars = info?.pillars ?? [];
   const journey = info?.journey ?? [];
   const storyImage = info?.storyImage ?? "";

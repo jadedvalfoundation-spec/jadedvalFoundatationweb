@@ -9,6 +9,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import GetInvolvedForms from "@/components/shared/GetInvolvedForms";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Get Involved",
   description:
