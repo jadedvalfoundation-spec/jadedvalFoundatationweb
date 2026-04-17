@@ -12,6 +12,7 @@ import SuccessStory from "@/models/SuccessStory";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import SuccessStoryCarousel from "@/components/shared/SuccessStoryCarousel";
+import ImpactDonateWidget from "@/components/shared/ImpactDonateWidget";
 
 export const dynamic = "force-dynamic";
 
@@ -392,32 +393,7 @@ export default async function ImpactPage({ params }: { params: Promise<{ lang: s
             {d.ctaSubtitle}
           </p>
 
-          {/* Amount chips */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            {[25, 50, 100, 250].map((amt) => (
-              <Link
-                key={amt}
-                href={`/${lang}/donate?amount=${amt}`}
-                className="rounded-full border border-brand/40 bg-brand/10 px-7 py-3 font-heading text-sm font-bold text-brand transition hover:bg-brand hover:text-white"
-              >
-                ${amt}
-              </Link>
-            ))}
-            <Link
-              href={`/${lang}/donate`}
-              className="rounded-full border border-white/20 px-7 py-3 text-sm font-bold text-white transition hover:border-brand hover:text-brand"
-            >
-              {d.ctaCustom}
-            </Link>
-          </div>
-
-          <Link
-            href={`/${lang}/donate`}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-10 py-4 font-heading text-base font-bold text-white shadow-lg shadow-brand/30 transition hover:opacity-90"
-          >
-            {d.ctaDonate}
-            <span>→</span>
-          </Link>
+          <ImpactDonateWidget lang={lang} ctaCustom={d.ctaCustom} ctaDonate={d.ctaDonate} />
 
           <p className="mt-5 text-xs text-gray-600">
             {d.ctaDisclaimer}

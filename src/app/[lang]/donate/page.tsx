@@ -51,7 +51,7 @@ export default async function DonatePage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ project?: string; name?: string }>;
+  searchParams: Promise<{ project?: string; name?: string; amount?: string }>;
 }) {
   const { lang } = await params;
   const sp = await searchParams;
@@ -68,6 +68,7 @@ export default async function DonatePage({
 
   const projectName = (project as { name?: string } | null)?.name ?? sp.name;
   const projectId = sp.project;
+  const initialAmount = sp.amount ? parseFloat(sp.amount) : undefined;
 
   const impactMade = (info as { impactMade?: number }).impactMade ?? 0;
 
@@ -137,6 +138,7 @@ export default async function DonatePage({
             <DonateForm
               projectId={projectId}
               projectName={projectName}
+              initialAmount={initialAmount}
               bankAccounts={bankAccounts.map((a) => ({
                 _id: String(a._id),
                 accountName: a.accountName,

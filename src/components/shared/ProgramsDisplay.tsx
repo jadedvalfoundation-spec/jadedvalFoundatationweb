@@ -114,8 +114,7 @@ function ProjectCardUI({ project, lang }: { project: ProjectCard; lang: Locale }
               style={{ width: `${pct}%` }}
             />
           </div>
-          <div className="mt-1.5 flex justify-between text-xs text-gray-500">
-            <span>{project.donorCount} {d.donorCount}</span>
+          <div className="mt-1.5 flex justify-end text-xs text-gray-500">
             <span>{dp.goal}: ${project.targetAmount.toLocaleString()}</span>
           </div>
         </div>

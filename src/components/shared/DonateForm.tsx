@@ -17,6 +17,8 @@ interface DonateFormProps {
   flwPublicKey?: string;
   bankAccounts?: BankAccount[];
   userCurrency?: string;
+  /** Pre-selected USD amount coming from ?amount= query param */
+  initialAmount?: number;
 }
 
 const PRESET_USD = [100, 200, 300, 500, 1000];
@@ -52,6 +54,7 @@ export default function DonateForm({
   programId,
   bankAccounts = [],
   userCurrency = "USD",
+  initialAmount,
 }: DonateFormProps) {
   const { dict } = useLocale();
   const d = dict.donate;
@@ -71,9 +74,13 @@ export default function DonateForm({
   const activeRate = rates[activeCurrency] ?? 1;
   const symbol = CURRENCY_SYMBOLS[activeCurrency] ?? `${activeCurrency} `;
 
-  // Form fields
-  const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
-  const [customAmt, setCustomAmt] = useState("");
+  // Form fields — pre-populate from ?amount= query param if provided
+  const [selectedPreset, setSelectedPreset] = useState<number | null>(
+    initialAmount && PRESET_USD.includes(initialAmount) ? initialAmount : null
+  );
+  const [customAmt, setCustomAmt] = useState(
+    initialAmount && !PRESET_USD.includes(initialAmount) ? String(initialAmount) : ""
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 

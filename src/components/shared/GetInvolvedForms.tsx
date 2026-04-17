@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocale } from "@/components/providers/LocaleProvider";
 
 type FormType = "volunteer" | "individual" | "corporate";
@@ -267,6 +267,19 @@ export default function GetInvolvedForms() {
   const { dict } = useLocale();
   const d = dict.getInvolved;
   const [active, setActive] = useState<FormType>("volunteer");
+
+  // Switch to the correct tab when the page navigates to a form-specific hash
+  useEffect(() => {
+    function applyHash() {
+      const hash = window.location.hash;
+      if (hash === "#form-individual") setActive("individual");
+      else if (hash === "#form-corporate") setActive("corporate");
+      else if (hash === "#form-volunteer") setActive("volunteer");
+    }
+    applyHash(); // run once on mount in case the user lands with a hash in the URL
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
 
   const TABS: { value: FormType; label: string; icon: string; desc: string }[] = [
     { value: "volunteer",  label: d.tabVolunteer,  icon: "🤝", desc: d.tabVolunteerDesc },

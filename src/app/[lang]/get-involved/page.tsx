@@ -41,6 +41,12 @@ function fmt(n: number) {
   return n.toLocaleString();
 }
 
+const VOLUNTEER_PERKS = [
+  { icon: "🌍", title: "On-Ground Impact", desc: "Work directly with communities on education, health, and development programmes." },
+  { icon: "📚", title: "Skills Development", desc: "Gain hands-on experience and mentorship across technology, health, and social sectors." },
+  { icon: "🏅", title: "Recognition & Certification", desc: "Receive official volunteer certificates and letters of recommendation." },
+];
+
 const INDIVIDUAL_PERKS = [
   { icon: "📊", title: "Quarterly Impact Reports", desc: "Personalised insights into exactly where your resources are creating change." },
   { icon: "🏔", title: "Priority Access to Summits", desc: "Exclusive invitations to our annual Digital Alchemist global summits." },
@@ -129,7 +135,32 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
             <div className="mx-auto mt-3 h-0.5 w-12 bg-brand" />
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-3">
+            {/* Volunteer */}
+            <div className="flex flex-col rounded-2xl p-8"
+              style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">{d.tabVolunteer}</span>
+              <h3 className="mt-1 font-heading text-2xl font-bold text-white">{d.tabVolunteer}</h3>
+              <p className="mt-2 text-sm text-gray-400">{d.tabVolunteerDesc}</p>
+              <ul className="mt-6 flex-1 space-y-5">
+                {VOLUNTEER_PERKS.map((perk) => (
+                  <li key={perk.title} className="flex gap-4">
+                    <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-brand/10 text-lg">
+                      {perk.icon}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white">{perk.title}</p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-gray-400">{perk.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <a href="#form-volunteer"
+                className="mt-8 block rounded-lg border border-brand bg-brand/10 py-3.5 text-center text-sm font-bold text-brand transition hover:bg-brand hover:text-white">
+                {d.tabVolunteer}
+              </a>
+            </div>
+
             {/* Individual */}
             <div className="flex flex-col rounded-2xl p-8"
               style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -149,7 +180,7 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
                   </li>
                 ))}
               </ul>
-              <a href="#get-involved-forms"
+              <a href="#form-individual"
                 className="mt-8 block rounded-lg border border-brand bg-brand/10 py-3.5 text-center text-sm font-bold text-brand transition hover:bg-brand hover:text-white">
                 {d.tabIndividual}
               </a>
@@ -174,7 +205,7 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
                   </li>
                 ))}
               </ul>
-              <a href="#get-involved-forms"
+              <a href="#form-corporate"
                 className="mt-8 block rounded-lg border border-brand bg-brand/10 py-3.5 text-center text-sm font-bold text-brand transition hover:bg-brand hover:text-white">
                 {d.tabCorporate}
               </a>
@@ -184,7 +215,11 @@ export default async function GetInvolvedPage({ params }: { params: Promise<{ la
       </section>
 
       {/* ── Forms ────────────────────────────────────────────────────────── */}
-      <section id="get-involved-forms" className="py-20" style={{ background: "#0a1520" }}>
+      {/* Hash anchors — these are the scroll targets for each card button */}
+      <span id="form-volunteer" className="block" style={{ scrollMarginTop: "80px" }} />
+      <span id="form-individual" className="block" style={{ scrollMarginTop: "80px" }} />
+      <span id="form-corporate" className="block" style={{ scrollMarginTop: "80px" }} />
+      <section className="py-20" style={{ background: "#0a1520" }}>
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <div className="mb-10 text-center">
             <span className="text-xs font-bold uppercase tracking-widest text-brand">{dict.nav.getInvolved}</span>
