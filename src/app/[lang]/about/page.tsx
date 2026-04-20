@@ -17,16 +17,22 @@ export const dynamic = "force-dynamic";
 async function getInfo() {
   try {
     await connectDB();
-    return await WebsiteInfo.findOne(
+    const doc = await WebsiteInfo.findOne(
       {},
-      { aboutUs: 1, mission: 1, vision: 1, pillars: 1, journey: 1, storyImage: 1 }
+      { aboutUs: 1, mission: 1, vision: 1, pillars: 1, journey: 1, storyImage: 1, donationCtaTitle: 1, donationCtaDescription: 1 }
     ).lean() as {
       aboutUs?: string; mission?: string; vision?: string;
       pillars?: { icon: string; title: string; description: string }[];
       journey?: { date: string; title: string; description: string }[];
       storyImage?: string;
+      donationCtaTitle?: string;
+      donationCtaDescription?: string;
     } | null;
-  } catch {
+    console.log("[about getInfo] donationCtaTitle:", doc?.donationCtaTitle);
+    console.log("[about getInfo] donationCtaDescription:", doc?.donationCtaDescription);
+    return doc;
+  } catch (err) {
+    console.error("[about getInfo] error:", err);
     return null;
   }
 }
@@ -63,6 +69,8 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
   const pillars = info?.pillars ?? [];
   const journey = info?.journey ?? [];
   const storyImage = info?.storyImage ?? "";
+  const donationCtaTitle = info?.donationCtaTitle?.trim() || dict.impact.detailContinueTitle;
+  const donationCtaDescription = info?.donationCtaDescription?.trim() || dict.impact.detailContinueSubtitle;
 
   const pillarTitles = pillars.length > 0 ? await translateMany(pillars.map(p => p.title), lang as Locale) : [];
   const pillarDescs  = pillars.length > 0 ? await translateMany(pillars.map(p => p.description), lang as Locale) : [];
@@ -114,30 +122,60 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 sm:grid-cols-2">
             {/* Vision */}
-            <div className="rounded-2xl p-8"
+            <div className="flex flex-col rounded-2xl p-6 h-96"
               style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-2xl">
+              <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-xl">
                 👁
               </div>
-              <h2 className="font-heading text-xl font-bold text-white">{d.visionTitle}</h2>
+              <h2 className="font-heading text-xl font-bold text-white shrink-0">{d.visionTitle}</h2>
               {vision ? (
-                <RichReadMore html={vision} className="mt-3 text-gray-400" collapsedHeight={120} fadeColor="#0f1e2a" />
+                <div className="relative mt-2 flex-1 min-h-0">
+                  <div
+                    className="rich-content h-full overflow-y-auto text-gray-400 pr-2"
+                    style={{ scrollbarWidth: "thin", scrollbarColor: "#00CCBB66 transparent" }}
+                    dangerouslySetInnerHTML={{ __html: vision }}
+                  />
+                  {/* Scroll fade indicator */}
+                  <div
+                    className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 flex items-end justify-center pb-1"
+                    style={{ background: "linear-gradient(to bottom, transparent, #0f1e2a)" }}
+                  >
+                    <svg className="h-4 w-4 text-brand/60 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
               ) : (
-                <p className="mt-3 text-gray-600 italic">Vision coming soon.</p>
+                <p className="mt-2 text-gray-600 italic">Vision coming soon.</p>
               )}
             </div>
 
             {/* Mission */}
-            <div className="rounded-2xl p-8"
+            <div className="flex flex-col rounded-2xl p-6 h-96"
               style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-2xl">
+              <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-xl">
                 🎯
               </div>
-              <h2 className="font-heading text-xl font-bold text-white">{d.missionTitle}</h2>
+              <h2 className="font-heading text-xl font-bold text-white shrink-0">{d.missionTitle}</h2>
               {mission ? (
-                <RichReadMore html={mission} className="mt-3 text-gray-400" collapsedHeight={120} fadeColor="#0f1e2a" />
+                <div className="relative mt-2 flex-1 min-h-0">
+                  <div
+                    className="rich-content h-full overflow-y-auto text-gray-400 pr-2"
+                    style={{ scrollbarWidth: "thin", scrollbarColor: "#00CCBB66 transparent" }}
+                    dangerouslySetInnerHTML={{ __html: mission }}
+                  />
+                  {/* Scroll fade indicator */}
+                  <div
+                    className="pointer-events-none absolute bottom-0 left-0 right-0 h-10 flex items-end justify-center pb-1"
+                    style={{ background: "linear-gradient(to bottom, transparent, #0f1e2a)" }}
+                  >
+                    <svg className="h-4 w-4 text-brand/60 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
               ) : (
-                <p className="mt-3 text-gray-600 italic">Mission coming soon.</p>
+                <p className="mt-2 text-gray-600 italic">Mission coming soon.</p>
               )}
             </div>
           </div>
@@ -149,17 +187,17 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-10 text-center font-heading text-3xl font-bold text-white">{d.pillarsTitle}</h2>
           {displayPillars.length > 0 ? (
-            <div className={`grid gap-6 sm:grid-cols-2 ${displayPillars.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-4"}`}>
+            <div className={`grid gap-8 sm:grid-cols-2 ${displayPillars.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-4"}`}>
               {displayPillars.map((pillar, i) => (
-                <div key={i} className="rounded-2xl p-6"
+                <div key={i} className="rounded-2xl p-10 min-h-56"
                   style={{ background: "#0f1e2a", border: "1px solid rgba(255,255,255,0.08)" }}>
                   {pillar.icon && (
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-xl">
+                    <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl bg-brand/10 text-4xl">
                       {pillar.icon}
                     </div>
                   )}
-                  <h3 className="font-heading text-base font-bold text-white">{pillar.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-400">{pillar.description}</p>
+                  <h3 className="font-heading text-2xl font-bold text-white">{pillar.title}</h3>
+                  <p className="mt-4 text-base font-medium leading-relaxed text-gray-400">{pillar.description}</p>
                 </div>
               ))}
             </div>
@@ -224,8 +262,8 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
       {/* ── CTA strip ─────────────────────────────────────────────────────── */}
       <section className="py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h2 className="font-heading text-3xl font-bold text-white">{dict.impact.detailContinueTitle}</h2>
-          <p className="mt-4 text-gray-400">{dict.impact.detailContinueSubtitle}</p>
+          <h2 className="font-heading text-3xl font-bold text-white">{donationCtaTitle}</h2>
+          <p className="mt-4 text-gray-400">{donationCtaDescription}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href={`/${lang}/donate`} className="rounded-full bg-brand px-8 py-3 text-sm font-bold text-white transition hover:bg-brand-dark">
               {dc.donateNow}

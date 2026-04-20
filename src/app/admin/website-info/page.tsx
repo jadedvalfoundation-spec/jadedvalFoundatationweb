@@ -27,6 +27,8 @@ interface Info {
   aboutUs: string;
   mission: string;
   vision: string;
+  donationCtaTitle: string;
+  donationCtaDescription: string;
   impactMade: number;
   countriesReached: number;
   communitiesImpacted: number;
@@ -56,6 +58,8 @@ const BLANK: Info = {
   aboutUs: "",
   mission: "",
   vision: "",
+  donationCtaTitle: "",
+  donationCtaDescription: "",
   impactMade: 0,
   countriesReached: 0,
   communitiesImpacted: 0,
@@ -78,7 +82,7 @@ const BLANK: Info = {
   bankTransferNote: "",
 };
 
-const SECTIONS = ["Contact", "About", "Stats", "Social Media", "FAQ", "Pillars", "Journey", "Media", "Bank Details", "Impact Analytics"] as const;
+const SECTIONS = ["Contact", "About", "Donation CTA", "Stats", "Social Media", "FAQ", "Pillars", "Journey", "Media", "Bank Details", "Impact Analytics"] as const;
 type Section = typeof SECTIONS[number];
 
 export default function WebsiteInfoPage() {
@@ -92,6 +96,9 @@ export default function WebsiteInfoPage() {
     fetch("/api/admin/website-info")
       .then(r => r.json())
       .then(json => {
+        console.log("[website-info GET] full response:", json);
+        console.log("[website-info GET] donationCtaTitle:", json.data?.donationCtaTitle);
+        console.log("[website-info GET] donationCtaDescription:", json.data?.donationCtaDescription);
         if (json.success) setInfo({ ...BLANK, ...json.data });
         setLoading(false);
       });
@@ -100,12 +107,18 @@ export default function WebsiteInfoPage() {
   async function handleSave() {
     setSaving(true);
     setSaved(false);
+    console.log("[website-info PUT] sending:", {
+      donationCtaTitle: info.donationCtaTitle,
+      donationCtaDescription: info.donationCtaDescription,
+    });
     const res = await fetch("/api/admin/website-info", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(info),
     });
     const json = await res.json();
+    console.log("[website-info PUT] response:", json);
+    console.log("[website-info PUT] saved donationCtaTitle:", json.data?.donationCtaTitle);
     setSaving(false);
     if (json.success) {
       setSaved(true);
@@ -242,6 +255,31 @@ export default function WebsiteInfoPage() {
                   onChange={val => setInfo(prev => ({ ...prev, vision: val }))}
                 />
               </div>
+            </div>
+          )}
+
+          {activeSection === "Donation CTA" && (
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-base font-semibold text-gray-800">Donation CTA</h2>
+                <p className="mt-1 text-sm text-gray-500">
+                  The call-to-action block shown at the bottom of the About page and Impact detail pages.
+                  Defaults to &ldquo;Be Part of the Next Story&rdquo; if left blank.
+                </p>
+              </div>
+              <Input
+                label="Title"
+                value={info.donationCtaTitle}
+                onChange={e => setInfo(prev => ({ ...prev, donationCtaTitle: e.target.value }))}
+                placeholder="Be Part of the Next Story"
+              />
+              <Textarea
+                label="Description"
+                rows={3}
+                value={info.donationCtaDescription}
+                onChange={e => setInfo(prev => ({ ...prev, donationCtaDescription: e.target.value }))}
+                placeholder="Your donation helps us create more stories like this one. Every contribution — big or small — drives real change."
+              />
             </div>
           )}
 

@@ -24,7 +24,7 @@
   --color-brand-light: var(--brand-light);
   --color-brand-lighter: var(--brand-lighter);
   --font-heading: var(--font-montserrat), sans-serif;
-  --font-body: var(--font-inter), sans-serif;
+  --font-body: var(--font-montserrat), sans-serif;
   --color-site-bg: var(--site-bg);
   --color-site-card: var(--site-card);
   --color-site-card-light: var(--site-card-light);

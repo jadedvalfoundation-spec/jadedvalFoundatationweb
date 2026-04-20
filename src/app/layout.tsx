@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -79,7 +74,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      className={`${inter.variable} ${montserrat.variable} h-full antialiased`}
+      className={`${montserrat.variable} h-full antialiased`}
     >
       <head>
         <script

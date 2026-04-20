@@ -32,6 +32,8 @@ export interface IWebsiteInfo extends Document {
   aboutUs: string;
   mission: string;
   vision: string;
+  donationCtaTitle: string;
+  donationCtaDescription: string;
   impactMade: number;
   countriesReached: number;
   communitiesImpacted: number;
@@ -102,6 +104,8 @@ const WebsiteInfoSchema = new Schema<IWebsiteInfo>(
     aboutUs: { type: String, default: "" },
     mission: { type: String, default: "" },
     vision: { type: String, default: "" },
+    donationCtaTitle: { type: String, default: "" },
+    donationCtaDescription: { type: String, default: "" },
     impactMade: { type: Number, default: 0 },
     countriesReached: { type: Number, default: 0 },
     communitiesImpacted: { type: Number, default: 0 },
@@ -126,6 +130,12 @@ const WebsiteInfoSchema = new Schema<IWebsiteInfo>(
   },
   { timestamps: true }
 );
+
+// In development, delete the cached model so schema changes are picked up
+// after hot-reload without requiring a full server restart.
+if (process.env.NODE_ENV !== "production") {
+  delete (mongoose.models as Record<string, unknown>).WebsiteInfo;
+}
 
 const WebsiteInfo: Model<IWebsiteInfo> =
   mongoose.models.WebsiteInfo ??

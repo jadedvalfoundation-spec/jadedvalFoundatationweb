@@ -7,6 +7,7 @@ import type { Locale } from "@/lib/i18n";
 import { getDictionary } from "@/lib/dictionaries";
 import connectDB from "@/lib/mongodb";
 import Impact from "@/models/Impact";
+import WebsiteInfo from "@/models/WebsiteInfo";
 import mongoose from "mongoose";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
@@ -34,6 +35,17 @@ async function getImpact(id: string) {
     if (!oid) return null;
     const impact = await Impact.findOne({ _id: oid, isPublished: true }).lean();
     return impact;
+  } catch {
+    return null;
+  }
+}
+
+async function getDonationCta() {
+  try {
+    await connectDB();
+    return await WebsiteInfo.findOne({}, { donationCtaTitle: 1, donationCtaDescription: 1 }).lean() as {
+      donationCtaTitle?: string; donationCtaDescription?: string;
+    } | null;
   } catch {
     return null;
   }
@@ -85,12 +97,15 @@ export default async function ImpactDetailPage({
   const { lang, id } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const [rawImpact, dict] = await Promise.all([
+  const [rawImpact, dict, siteInfo] = await Promise.all([
     getImpact(id),
     getDictionary(lang as Locale),
+    getDonationCta(),
   ]);
   const d = dict.impact;
   const dc = dict.common;
+  const donationCtaTitle = siteInfo?.donationCtaTitle?.trim() || d.detailContinueTitle;
+  const donationCtaDescription = siteInfo?.donationCtaDescription?.trim() || d.detailContinueSubtitle;
 
   const impact = rawImpact as {
     _id: unknown; title: string; description: string; details: string;
@@ -244,10 +259,10 @@ export default async function ImpactDetailPage({
         <div className="mx-auto max-w-3xl px-4 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-brand">{d.detailContinueBadge}</p>
           <h3 className="mt-3 font-heading text-3xl font-bold text-white">
-            {d.detailContinueTitle}
+            {donationCtaTitle}
           </h3>
           <p className="mt-4 text-base leading-relaxed text-gray-400">
-            {d.detailContinueSubtitle}
+            {donationCtaDescription}
           </p>
           <Link
             href={`/${lang}/donate`}
